@@ -4,10 +4,10 @@ const dictionary = [
     { georgian_letter: "ბ", russian_letter: "б", comment: "" },
     { georgian_letter: "გ", russian_letter: "г", comment: "" },
     { georgian_letter: "დ", russian_letter: "д", comment: "" },
-    { georgian_letter: "ე", russian_letter: "е", comment: "" },
+    { georgian_letter: "ე", russian_letter: "э", comment: "" },
     { georgian_letter: "ვ", russian_letter: "в", comment: "" },
     { georgian_letter: "ზ", russian_letter: "з", comment: "" },
-    { georgian_letter: "თ", russian_letter: "т", comment: "" },
+    { georgian_letter: "თ", russian_letter: "т'", comment: "" },
     { georgian_letter: "ი", russian_letter: "и", comment: "" },
     { georgian_letter: "კ", russian_letter: "к", comment: "" },
     { georgian_letter: "ლ", russian_letter: "л", comment: "" },
@@ -23,16 +23,16 @@ const dictionary = [
     { georgian_letter: "ფ", russian_letter: "п'", comment: "" },
     { georgian_letter: "ქ", russian_letter: "к'", comment: "" },
     { georgian_letter: "ღ", russian_letter: "гх", comment: "" },
-    { georgian_letter: "ყ", russian_letter: "к'", comment: "" },
+    { georgian_letter: "ყ", russian_letter: "кх", comment: "" },
     { georgian_letter: "შ", russian_letter: "ш", comment: "" },
     { georgian_letter: "ჩ", russian_letter: "ч", comment: "" },
     { georgian_letter: "ც", russian_letter: "ц", comment: "" },
     { georgian_letter: "ძ", russian_letter: "дз", comment: "" },
-    { georgian_letter: "წ", russian_letter: "ц'", comment: "" },
-    { georgian_letter: "ჭ", russian_letter: "ч'", comment: "" },
+    { georgian_letter: "წ", russian_letter: "цъ", comment: "" },
+    { georgian_letter: "ჭ", russian_letter: "чъ", comment: "" },
     { georgian_letter: "ხ", russian_letter: "х", comment: "" },
     { georgian_letter: "ჯ", russian_letter: "дж", comment: "" },
-    { georgian_letter: "ჰ", russian_letter: "х", comment: "" }
+    { georgian_letter: "ჰ", russian_letter: "х'", comment: "" }
 ];
 
 // List of Georgian words for Mode 3
