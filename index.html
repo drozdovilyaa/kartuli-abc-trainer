@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georgian Alphabet Trainer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Georgian Alphabet Trainer</h1>
+            <div class="stats">
+                <span>Score: <span id="score">0</span></span>
+                <span>Total: <span id="total">0</span></span>
+            </div>
+        </header>
+
+        <main id="game-area">
+            <div class="question-container">
+                <div id="question-text" class="question-text"></div>
+                <div id="word-container" class="word-container"></div>
+            </div>
+
+            <div id="options-container" class="options-container"></div>
+
+            <div id="feedback" class="feedback hidden"></div>
+
+            <button id="next-btn" class="next-btn hidden">Next</button>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
