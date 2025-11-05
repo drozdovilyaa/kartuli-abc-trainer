@@ -254,6 +254,12 @@ h1 {
 
 .letter-pool-btn.used {
     opacity: 0.3;
+    background: #dee2e6 !important;
+    color: #adb5bd !important;
+    border-color: #ced4da !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .word-letter-task {
@@ -319,7 +325,15 @@ h1 {
 
 .option-btn:disabled {
     cursor: not-allowed;
-    opacity: 0.7;
+    opacity: 0.5;
+    background: #e9ecef;
+    color: #6c757d;
+    transform: none !important;
+}
+
+.option-btn:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .feedback {
