@@ -82,7 +82,7 @@ function getRandomElements(array, count, exclude = []) {
     return shuffled.slice(0, count);
 }
 
-// Generate random mode (1, 2, or 3) with word delay logic
+// Generate random mode (1, 2, 3, or 4) with word delay logic
 function getRandomMode() {
     // Check if it's time for a word question
     if (letterQuestionsCount >= nextWordAfter) {
@@ -91,9 +91,10 @@ function getRandomMode() {
         return 3; // Word mode
     }
     
-    // Otherwise, random letter mode (1 or 2)
+    // Otherwise, random letter mode (1, 2, or 4)
     letterQuestionsCount++;
-    return Math.floor(Math.random() * 2) + 1; // Either 1 or 2
+    const modes = [1, 2, 4]; // Letter modes: multiple choice Georgian->Russian, Russian->Georgian, and typing
+    return modes[Math.floor(Math.random() * modes.length)];
 }
 
 // Mode 1: Show Georgian letter, pick Russian letter
@@ -132,6 +133,28 @@ function generateMode2Question() {
         correctAnswer: correctPair.georgian_letter,
         options: options.map(pair => pair.georgian_letter)
     };
+}
+
+// Mode 4: Type the letter (random direction: Georgian->Russian or Russian->Georgian)
+function generateMode4Question() {
+    const correctPair = getRandomElement(dictionary);
+    const showGeorgian = Math.random() < 0.5; // 50% chance for each direction
+    
+    if (showGeorgian) {
+        return {
+            mode: 4,
+            questionLetter: correctPair.georgian_letter,
+            correctAnswer: correctPair.russian_letter,
+            direction: 'georgian-to-russian'
+        };
+    } else {
+        return {
+            mode: 4,
+            questionLetter: correctPair.russian_letter,
+            correctAnswer: correctPair.georgian_letter,
+            direction: 'russian-to-georgian'
+        };
+    }
 }
 
 // Mode 3: Show Georgian word, select Russian letters in correct order
@@ -179,6 +202,8 @@ function generateNewQuestion() {
         return generateMode1Question();
     } else if (mode === 2) {
         return generateMode2Question();
+    } else if (mode === 4) {
+        return generateMode4Question();
     } else {
         return generateMode3Question();
     }
@@ -234,6 +259,23 @@ function displayQuestion(question) {
         wordContainer.appendChild(feedback);
         wordContainer.appendChild(nextBtn);
         displayOptions(question.options, (answer) => handleAnswer(answer, question.correctAnswer));
+    } else if (question.mode === 4) {
+        // Mode 4: Type the answer
+        const questionContainer = document.createElement('div');
+        questionContainer.className = 'question-with-hint';
+        
+        const letterSpan = document.createElement('span');
+        letterSpan.textContent = question.questionLetter;
+        
+        // Add hint button
+        const hintBtn = createHintButton(`Hint: ${question.correctAnswer}`);
+        
+        questionContainer.appendChild(letterSpan);
+        questionContainer.appendChild(hintBtn);
+        questionText.appendChild(questionContainer);
+        
+        // Display input field for typing
+        displayTypingMode();
     } else if (question.mode === 3) {
         // Create container for question and hint
         const questionContainer = document.createElement('div');
@@ -268,6 +310,51 @@ function displayOptions(options, onSelect) {
         });
         optionsContainer.appendChild(btn);
     });
+}
+
+// Display Mode 4: Type the answer
+function displayTypingMode() {
+    wordContainer.innerHTML = '';
+    
+    // Create input container
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'typing-container';
+    
+    const inputLabel = document.createElement('div');
+    inputLabel.className = 'typing-label';
+    inputLabel.textContent = 'Type the answer:';
+    
+    const inputField = document.createElement('input');
+    inputField.type = 'text';
+    inputField.className = 'typing-input';
+    inputField.id = 'typing-input';
+    inputField.placeholder = 'Enter letter(s)...';
+    inputField.autocomplete = 'off';
+    
+    // Submit on Enter key
+    inputField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleTypingSubmit();
+        }
+    });
+    
+    inputContainer.appendChild(inputLabel);
+    inputContainer.appendChild(inputField);
+    wordContainer.appendChild(inputContainer);
+    
+    // Add submit button
+    const submitBtn = document.createElement('button');
+    submitBtn.className = 'control-btn submit-btn';
+    submitBtn.textContent = 'Submit';
+    submitBtn.addEventListener('click', handleTypingSubmit);
+    wordContainer.appendChild(submitBtn);
+    
+    // Move feedback and next button to word container
+    wordContainer.appendChild(feedback);
+    wordContainer.appendChild(nextBtn);
+    
+    // Focus the input field
+    setTimeout(() => inputField.focus(), 100);
 }
 
 // Display Mode 3: Word translation with letter pool
@@ -381,6 +468,36 @@ function updateAnswerDisplay() {
             answerDisplay.appendChild(letterSpan);
         });
     }
+}
+
+// Handle Mode 4 typing submission
+function handleTypingSubmit() {
+    const inputField = document.getElementById('typing-input');
+    if (!inputField) return;
+    
+    const userAnswer = inputField.value.trim().toLowerCase();
+    if (!userAnswer) return;
+    
+    const correctAnswer = currentQuestion.correctAnswer.toLowerCase();
+    const isCorrect = userAnswer === correctAnswer;
+    
+    // Disable input and button
+    inputField.disabled = true;
+    const submitBtn = wordContainer.querySelector('.submit-btn');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.display = 'none';
+    }
+    
+    // Update score
+    total++;
+    if (isCorrect) {
+        score++;
+    }
+    updateStats();
+    
+    // Show feedback
+    showFeedback(isCorrect, currentQuestion.correctAnswer);
 }
 
 // Handle Mode 3 submission
