@@ -37,14 +37,14 @@ const dictionary = [
 
 // List of Georgian words for Mode 3
 const georgianWords = [
-    "მამა",     // mama (father)
-    "დედა",     // deda (mother)
-    "სახლი",    // sakhli (house)
-    "წიგნი",    // ts'igni (book)
-    "ქალაქი",   // k'alak'i (city)
-    "მთა",      // mta (mountain)
-    "თბილისი",  // tbilisi
-    "საქართველო" // sak'art'velo (Georgia)
+    { word: "მამა", translation: "отец" },      // mama (father)
+    { word: "დედა", translation: "мать" },      // deda (mother)
+    { word: "სახლი", translation: "дом" },       // sakhli (house)
+    { word: "წიგნი", translation: "книга" },     // ts'igni (book)
+    { word: "ქალაქი", translation: "город" },    // k'alak'i (city)
+    { word: "მთა", translation: "гора" },        // mta (mountain)
+    { word: "თბილისი", translation: "Тбилиси" }, // tbilisi
+    { word: "საქართველო", translation: "Грузия" } // sak'art'velo (Georgia)
 ];
 
 // Game state
@@ -53,6 +53,8 @@ let total = 0;
 let currentMode = null;
 let currentQuestion = null;
 let currentWordTasks = [];
+let letterQuestionsCount = 0;
+let nextWordAfter = getRandomWordDelay();
 
 // DOM elements
 const questionText = document.getElementById('question-text');
@@ -62,6 +64,11 @@ const feedback = document.getElementById('feedback');
 const nextBtn = document.getElementById('next-btn');
 const scoreEl = document.getElementById('score');
 const totalEl = document.getElementById('total');
+
+// Get random delay for next word question (3 to 10)
+function getRandomWordDelay() {
+    return Math.floor(Math.random() * 8) + 3; // Random number between 3 and 10
+}
 
 // Utility function to get random element from array
 function getRandomElement(array) {
@@ -75,9 +82,18 @@ function getRandomElements(array, count, exclude = []) {
     return shuffled.slice(0, count);
 }
 
-// Generate random mode (1, 2, or 3)
+// Generate random mode (1, 2, or 3) with word delay logic
 function getRandomMode() {
-    return Math.floor(Math.random() * 3) + 1;
+    // Check if it's time for a word question
+    if (letterQuestionsCount >= nextWordAfter) {
+        letterQuestionsCount = 0;
+        nextWordAfter = getRandomWordDelay();
+        return 3; // Word mode
+    }
+    
+    // Otherwise, random letter mode (1 or 2)
+    letterQuestionsCount++;
+    return Math.floor(Math.random() * 2) + 1; // Either 1 or 2
 }
 
 // Mode 1: Show Georgian letter, pick Russian letter
@@ -120,7 +136,8 @@ function generateMode2Question() {
 
 // Mode 3: Show Georgian word, select Russian letters in correct order
 function generateMode3Question() {
-    const word = getRandomElement(georgianWords);
+    const wordObj = getRandomElement(georgianWords);
+    const word = wordObj.word;
     const correctAnswer = [];
     
     // Build the correct answer
@@ -146,6 +163,7 @@ function generateMode3Question() {
     return {
         mode: 3,
         word: word,
+        translation: wordObj.translation,
         correctAnswer: correctAnswer,
         letterPool: shuffledPool,
         userAnswer: [],
@@ -166,6 +184,20 @@ function generateNewQuestion() {
     }
 }
 
+// Create hint button
+function createHintButton(hintText) {
+    const hintBtn = document.createElement('button');
+    hintBtn.className = 'hint-btn';
+    hintBtn.textContent = '?';
+    hintBtn.title = 'Show hint';
+    
+    hintBtn.addEventListener('click', () => {
+        alert(hintText);
+    });
+    
+    return hintBtn;
+}
+
 // Display question based on mode
 function displayQuestion(question) {
     currentQuestion = question;
@@ -176,13 +208,47 @@ function displayQuestion(question) {
     feedback.classList.add('hidden');
     
     if (question.mode === 1 || question.mode === 2) {
-        questionText.textContent = question.questionLetter;
+        // Create container for question and hint
+        const questionContainer = document.createElement('div');
+        questionContainer.className = 'question-with-hint';
+        
+        const letterSpan = document.createElement('span');
+        letterSpan.textContent = question.questionLetter;
+        
+        // Add hint button
+        let hintText = '';
+        if (question.mode === 1) {
+            // Showing Georgian, hint is Russian
+            hintText = `Hint: ${question.correctAnswer}`;
+        } else {
+            // Showing Russian, hint is Georgian
+            hintText = `Hint: ${question.correctAnswer}`;
+        }
+        const hintBtn = createHintButton(hintText);
+        
+        questionContainer.appendChild(letterSpan);
+        questionContainer.appendChild(hintBtn);
+        questionText.appendChild(questionContainer);
+        
         // Move feedback and next button to word container for Mode 1 and 2
         wordContainer.appendChild(feedback);
         wordContainer.appendChild(nextBtn);
         displayOptions(question.options, (answer) => handleAnswer(answer, question.correctAnswer));
     } else if (question.mode === 3) {
-        questionText.textContent = `Translate the word: ${question.word}`;
+        // Create container for question and hint
+        const questionContainer = document.createElement('div');
+        questionContainer.className = 'question-with-hint';
+        
+        const textSpan = document.createElement('span');
+        textSpan.textContent = `Translate the word: ${question.word}`;
+        
+        // Add hint button for translation
+        const hintBtn = createHintButton(`Hint: ${question.translation}`);
+        
+        questionContainer.appendChild(textSpan);
+        questionContainer.appendChild(hintBtn);
+        questionText.appendChild(questionContainer);
+        
         displayWordMode3();
     }
 }
