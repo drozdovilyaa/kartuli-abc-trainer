@@ -78,9 +78,6 @@ export function displayQuestionWithHint(letterText, hintText, isGeorgianLetter =
     
     const letterSpan = document.createElement('span');
     letterSpan.textContent = letterText;
-    if (isGeorgianLetter) {
-        letterSpan.className = 'georgian-letter';
-    }
     
     const hintBtn = createHintButton(hintText);
     

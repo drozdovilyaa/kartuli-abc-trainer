@@ -76,11 +76,6 @@ h1 {
     flex-wrap: wrap;
 }
 
-.question-with-hint .georgian-letter {
-    font-size: 2.5em;
-    font-weight: bold;
-}
-
 .hint-btn {
     position: absolute;
     top: 0;
