@@ -86,7 +86,17 @@ export class GameState {
                 5: 'Phrase Translation'
             };
             
-            console.log(`\n🎯 Mode ${mode}: ${modeNames[mode]}`);
+            // Different mastery thresholds for different modes
+            let masteryThreshold;
+            if (mode === 1 || mode === 2) {
+                masteryThreshold = 1;
+            } else if (mode === 4) {
+                masteryThreshold = 2;
+            } else {
+                masteryThreshold = 3;
+            }
+            
+            console.log(`\n🎯 Mode ${mode}: ${modeNames[mode]} (mastery: ${masteryThreshold} correct)`);
             console.log('───────────────────────────────────────────');
             
             const modeMemory = this.memory[mode];
@@ -95,8 +105,8 @@ export class GameState {
             if (items.length === 0) {
                 console.log('  No items practiced yet');
             } else {
-                const mastered = items.filter(key => modeMemory[key].correctCount >= 3);
-                const inProgress = items.filter(key => modeMemory[key].correctCount > 0 && modeMemory[key].correctCount < 3);
+                const mastered = items.filter(key => modeMemory[key].correctCount >= masteryThreshold);
+                const inProgress = items.filter(key => modeMemory[key].correctCount > 0 && modeMemory[key].correctCount < masteryThreshold);
                 const needsWork = items.filter(key => modeMemory[key].correctCount === 0);
                 
                 console.log(`  Total practiced: ${items.length}`);
@@ -178,7 +188,10 @@ export class GameState {
     }
 
     /**
-     * Check if item is mastered (3 correct answers in a row) for a mode
+     * Check if item is mastered for a mode
+     * For modes 1 and 2: 1 correct answer is enough
+     * For mode 4: 2 correct answers in a row required
+     * For modes 3 and 5: 3 correct answers in a row required
      * @param {number} mode - Question mode
      * @param {string} itemKey - Unique identifier for the item
      * @returns {boolean} True if item is mastered
@@ -187,7 +200,18 @@ export class GameState {
         if (!this.memory[mode] || !this.memory[mode][itemKey]) {
             return false;
         }
-        return this.memory[mode][itemKey].correctCount >= 3;
+        
+        // Different mastery thresholds for different modes
+        let requiredCorrect;
+        if (mode === 1 || mode === 2) {
+            requiredCorrect = 1; // Letter recognition modes
+        } else if (mode === 4) {
+            requiredCorrect = 2; // Typing mode
+        } else {
+            requiredCorrect = 3; // Word and phrase modes
+        }
+        
+        return this.memory[mode][itemKey].correctCount >= requiredCorrect;
     }
 
     /**

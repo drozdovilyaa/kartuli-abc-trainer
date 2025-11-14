@@ -170,7 +170,6 @@ export const georgianWords = [
 
 // List of Georgian phrases for Mode 5 (Russian phrase -> Select Georgian words)
 export const georgianPhrases = [
-[
     {
         "phrase": "მე ავად ვარ და საავადმყოფოში ვმკურნალობ.",
         "russianPhrase": "Я болен и лечусь в больнице.",
@@ -327,5 +326,4 @@ export const georgianPhrases = [
         "words": ["ეს", "შენი", "წიგნია"],
         "comment": "Is this your book?"
     }
-]
 ];
