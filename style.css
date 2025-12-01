@@ -11,6 +11,19 @@
     --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* Georgian Fonts */
+.geo-font-1 {
+    font-family: 'Noto Sans Georgian', sans-serif;
+}
+
+.geo-font-2 {
+    font-family: 'Noto Serif Georgian', serif;
+}
+
+.geo-font-3 {
+    font-family: 'BPG Glaho Traditional', 'Noto Sans Georgian', sans-serif;
+}
+
 /* Reset & Base */
 html, body {
     height: 100%;
@@ -20,7 +33,7 @@ html, body {
 }
 
 body {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    background: #f0f2f5;
 }
 
 /* App Container — fullscreen on mobile */

@@ -14,6 +14,18 @@ import { DataRepository } from './state.js';
  * Создаёт DOM-элементы для разных шаблонов вопросов (Bootstrap 5.3)
  */
 export class QuestionRendererFactory {
+    /** Массив классов грузинских шрифтов */
+    static GEO_FONTS = ['geo-font-1', 'geo-font-2', 'geo-font-3'];
+
+    /**
+     * Получить случайный класс грузинского шрифта
+     * @returns {string} CSS класс шрифта
+     */
+    static getRandomFontClass() {
+        const index = Math.floor(Math.random() * QuestionRendererFactory.GEO_FONTS.length);
+        return QuestionRendererFactory.GEO_FONTS[index];
+    }
+
     /**
      * Получить рендерер по типу шаблона
      * @param {string} template - Тип шаблона
@@ -56,10 +68,11 @@ export class QuestionRendererFactory {
         const others = allLetters.filter(l => l.rus !== correctAnswer);
         const distractors = Utils.getRandomElements(others, 3).map(l => l.rus);
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Какая буква соответствует?</p>
-            <div class="display-1 fw-bold text-primary">${item.geo}</div>
+            <div class="display-1 fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
         answerContainer.innerHTML = `
@@ -84,6 +97,7 @@ export class QuestionRendererFactory {
         const others = allLetters.filter(l => l.geo !== correctAnswer);
         const distractors = Utils.getRandomElements(others, 3).map(l => l.geo);
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Выберите на грузинском</p>
@@ -94,7 +108,7 @@ export class QuestionRendererFactory {
             <div class="row g-2">
                 ${options.map(opt => `
                     <div class="col-6">
-                        <button class="btn btn-outline-secondary w-100 py-3 fs-3 fw-bold option-btn" data-answer="${opt}">${opt}</button>
+                        <button class="btn btn-outline-secondary w-100 py-3 fs-3 fw-bold option-btn ${fontClass}" data-answer="${opt}">${opt}</button>
                     </div>
                 `).join('')}
             </div>
@@ -108,10 +122,11 @@ export class QuestionRendererFactory {
      */
     static renderInputGeoRus(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Напишите соответствие</p>
-            <div class="display-1 fw-bold text-primary">${item.geo}</div>
+            <div class="display-1 fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
         answerContainer.innerHTML = `
@@ -158,13 +173,13 @@ export class QuestionRendererFactory {
 
         return { type: 'input', correctAnswer, itemId: item.id };
     }
-
     /**
      * Шаблон: Сборка слова из букв (транслитерация → грузинский)
      */
     static renderWordAssembly(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo;
         const geoLetters = item.geo.split('');
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
         
         // Добавляем случайные буквы-дистракторы
         const allLetters = DataRepository.getAllLetters();
@@ -183,12 +198,12 @@ export class QuestionRendererFactory {
 
         answerContainer.innerHTML = `
             <div class="d-flex flex-column gap-3">
-                <div class="border rounded p-3 min-height-60 d-flex flex-wrap gap-2 justify-content-center align-items-center bg-white" id="assembly-zone">
+                <div class="border rounded p-3 min-height-60 d-flex flex-wrap gap-2 justify-content-center align-items-center bg-white ${fontClass}" id="assembly-zone">
                     <span class="text-muted fst-italic assembly-placeholder">Нажмите на буквы ниже</span>
                 </div>
                 <div class="d-flex flex-wrap gap-2 justify-content-center" id="pool-container">
                     ${poolLetters.map(letter => `
-                        <button class="btn btn-outline-secondary fs-4 fw-bold letter-btn" data-letter="${letter}">${letter}</button>
+                        <button class="btn btn-outline-secondary fs-4 fw-bold letter-btn ${fontClass}" data-letter="${letter}">${letter}</button>
                     `).join('')}
                 </div>
                 <div class="d-flex justify-content-center gap-2" id="assembly-controls">
@@ -214,10 +229,11 @@ export class QuestionRendererFactory {
     static renderTranslitInput(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.translit;
         const hintBtn = QuestionRendererFactory.renderHintButton(item.rus);
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Напишите транслитерацию ${hintBtn}</p>
-            <div class="display-4 fw-bold text-primary">${item.geo}</div>
+            <div class="display-4 fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
         answerContainer.innerHTML = `
@@ -244,10 +260,11 @@ export class QuestionRendererFactory {
         const correctAnswer = item.rus;
         // Подсказка показывает русский перевод
         const hintBtn = QuestionRendererFactory.renderHintButton(item.rus);
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Переведите слово ${hintBtn}</p>
-            <div class="display-4 fw-bold text-primary">${item.geo}</div>
+            <div class="display-4 fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
         answerContainer.innerHTML = `
@@ -274,6 +291,7 @@ export class QuestionRendererFactory {
         const correctAnswer = item.geo_phrase;
         const words = item.geo_words_shuffled || item.geo_phrase.split(' ');
         const shuffledWords = Utils.shuffleArray([...words]);
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Соберите фразу</p>
@@ -282,12 +300,12 @@ export class QuestionRendererFactory {
 
         answerContainer.innerHTML = `
             <div class="d-flex flex-column gap-3">
-                <div class="border rounded p-3 min-height-60 d-flex flex-wrap gap-2 justify-content-center align-items-center bg-white" id="assembly-zone">
+                <div class="border rounded p-3 min-height-60 d-flex flex-wrap gap-2 justify-content-center align-items-center bg-white ${fontClass}" id="assembly-zone">
                     <span class="text-muted fst-italic assembly-placeholder">Нажмите на слова ниже</span>
                 </div>
                 <div class="d-flex flex-wrap gap-2 justify-content-center" id="pool-container">
                     ${shuffledWords.map(word => `
-                        <button class="btn btn-outline-secondary fs-5 fw-bold word-btn" data-word="${word}">${word}</button>
+                        <button class="btn btn-outline-secondary fs-5 fw-bold word-btn ${fontClass}" data-word="${word}">${word}</button>
                     `).join('')}
                 </div>
                 <div class="d-flex justify-content-center gap-2" id="assembly-controls">

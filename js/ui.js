@@ -184,7 +184,7 @@ export class UIManager {
             
             if (!isCorrect) {
                 const hint = document.createElement('div');
-                hint.className = 'invalid-feedback d-block text-center';
+                hint.className = 'invalid-feedback d-block text-center fs-4 fw-bold';
                 hint.textContent = `Правильный ответ: ${correctAnswer}`;
                 input.parentNode.appendChild(hint);
             }
@@ -211,7 +211,7 @@ export class UIManager {
             
             if (!isCorrect) {
                 const hint = document.createElement('div');
-                hint.className = 'text-danger text-center mt-2 fw-semibold';
+                hint.className = 'text-danger text-center mt-2 fs-4 fw-bold';
                 hint.textContent = `Правильный ответ: ${correctAnswer}`;
                 zone.parentNode.appendChild(hint);
             }
