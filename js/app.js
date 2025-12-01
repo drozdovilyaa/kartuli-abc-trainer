@@ -89,6 +89,23 @@ export class App {
                 this._handleSubmit();
             }
         });
+
+        // Обработка фокуса на input для мобильной клавиатуры
+        document.addEventListener('focusin', (e) => {
+            if (e.target.id === 'answer-input') {
+                document.body.classList.add('keyboard-open');
+                // Прокрутка к input после открытия клавиатуры
+                setTimeout(() => {
+                    e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+
+        document.addEventListener('focusout', (e) => {
+            if (e.target.id === 'answer-input') {
+                document.body.classList.remove('keyboard-open');
+            }
+        });
     }
 
     /**
