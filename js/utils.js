@@ -1,32 +1,64 @@
-// Utility functions
+/**
+ * Utils Layer — Утилитарные функции
+ * ==================================
+ * Вспомогательные статические методы
+ */
+
+'use strict';
 
 /**
- * Get random element from array
- * @param {Array} array - Source array
- * @returns {*} Random element
+ * Utils — Утилитарный класс со статическими методами
  */
-export function getRandomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
+export class Utils {
+    /**
+     * Перемешать массив (Fisher-Yates shuffle)
+     * @param {Array} arr - Исходный массив
+     * @returns {Array} - Новый перемешанный массив
+     */
+    static shuffleArray(arr) {
+        const result = [...arr];
+        for (let i = result.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
+    }
 
-/**
- * Get random elements from array (excluding specific items)
- * @param {Array} array - Source array
- * @param {number} count - Number of elements to return
- * @param {Array} exclude - Elements to exclude
- * @returns {Array} Random elements
- */
-export function getRandomElements(array, count, exclude = []) {
-    const filtered = array.filter(item => !exclude.includes(item));
-    const shuffled = [...filtered].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
-}
+    /**
+     * Получить случайное число в диапазоне
+     * @param {number} min - Минимум (включительно)
+     * @param {number} max - Максимум (не включительно)
+     * @returns {number}
+     */
+    static getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
 
-/**
- * Shuffle array
- * @param {Array} array - Array to shuffle
- * @returns {Array} Shuffled array
- */
-export function shuffleArray(array) {
-    return [...array].sort(() => Math.random() - 0.5);
+    /**
+     * Получить N случайных элементов из массива
+     * @param {Array} arr - Исходный массив
+     * @param {number} n - Количество элементов
+     * @returns {Array}
+     */
+    static getRandomElements(arr, n) {
+        const shuffled = Utils.shuffleArray(arr);
+        return shuffled.slice(0, n);
+    }
+
+    /**
+     * Генерировать уникальный ID
+     * @returns {string}
+     */
+    static generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    /**
+     * Нормализация строки для сравнения
+     * @param {string} str - Строка
+     * @returns {string}
+     */
+    static normalizeString(str) {
+        return str.trim().toLowerCase();
+    }
 }

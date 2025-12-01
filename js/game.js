@@ -1,397 +1,203 @@
-// Main game logic and event handlers
-import { GameState } from './state.js';
-import { getRandomMode, generateQuestionByMode } from './questionGenerator.js';
-import { dictionary } from './data.js';
-import * as UI from './ui.js';
+/**
+ * Game Core Layer — Логика игровой сессии
+ * ========================================
+ * Класс для управления состоянием игры и spaced repetition
+ */
 
-export class Game {
-    constructor() {
-        this.state = new GameState();
-        this.elements = null;
+'use strict';
+
+import { Utils } from './utils.js';
+import { DataRepository } from './state.js';
+
+/**
+ * GameSession — Управление сессией обучения
+ * Реализует алгоритм spaced repetition с буфером
+ */
+export class GameSession {
+    /** Количество успехов для исключения элемента */
+    static SUCCESS_LIMIT = 3;
+    /** Размер буфера активных элементов */
+    static BUFFER_SIZE = 5;
+    /** Минимальный интервал между повторами (сколько других элементов показать) */
+    static MIN_REPEAT_INTERVAL = 3;
+
+    /**
+     * @param {string} mode - Режим: 'letters' или 'words'
+     */
+    constructor(mode) {
+        this.mode = mode;
+        /** Все элементы для изучения (перемешанные) */
+        this.allItems = Utils.shuffleArray(DataRepository.getData(mode));
+        /** Map<id, {item, successCount, lastSeen}> */
+        this.itemState = new Map();
+        /** Текущий буфер активных элементов */
+        this.activeBuffer = [];
+        /** История вопросов для анализа */
+        this.questionHistory = [];
+        /** Текущий вопрос */
+        this.currentQuestion = null;
+        /** История последних показанных ID (для интервала между повторами) */
+        this.recentItemIds = [];
+
+        this._initializeItems();
+        this._fillBuffer();
     }
 
     /**
-     * Initialize the game
+     * Инициализировать состояние всех элементов
+     * @private
      */
-    initialize() {
-        this.elements = UI.initializeElements();
-        this.setupEventListeners();
-        this.startNewRound();
-    }
-
-    /**
-     * Setup event listeners
-     */
-    setupEventListeners() {
-        this.elements.nextBtn.addEventListener('click', () => this.startNewRound());
-    }
-
-    /**
-     * Build hint text for letter questions
-     * @param {string} georgianLetter - Georgian letter
-     * @param {string} russianLetter - Russian letter
-     * @param {boolean} showingGeorgian - Whether we're showing Georgian letter
-     * @returns {string} Hint text
-     */
-    buildLetterHint(georgianLetter, russianLetter, showingGeorgian) {
-        const pair = dictionary.find(p => p.georgian_letter === georgianLetter);
-        
-        let hint = `Answer: ${showingGeorgian ? russianLetter : georgianLetter}`;
-        
-        if (pair && pair.comment) {
-            hint += `\n\nPronunciation: ${pair.comment}`;
-        }
-        
-        return hint;
-    }
-
-    /**
-     * Start a new round
-     */
-    startNewRound() {
-        let mode = getRandomMode(this.state);
-        let question = generateQuestionByMode(mode, this.state);
-        
-        // If mode has no available items (all mastered), try other modes
-        const attemptedModes = new Set([mode]);
-        const allModes = [1, 2, 3, 4, 5];
-        
-        while (question === null && attemptedModes.size < allModes.length) {
-            // Try another mode
-            const remainingModes = allModes.filter(m => !attemptedModes.has(m));
-            if (remainingModes.length === 0) break;
-            
-            mode = remainingModes[Math.floor(Math.random() * remainingModes.length)];
-            attemptedModes.add(mode);
-            question = generateQuestionByMode(mode, this.state);
-        }
-        
-        // If all modes are mastered, show congratulations
-        if (question === null) {
-            this.showCongratulations();
-            return;
-        }
-        
-        this.state.setCurrentQuestion(question);
-        this.displayQuestion(question);
-    }
-
-    /**
-     * Show congratulations message when all items are mastered
-     */
-    showCongratulations() {
-        const questionText = this.elements.questionText;
-        questionText.innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <h2 style="font-size: 3em; margin-bottom: 20px;">🎉 🎓 🎉</h2>
-                <h3 style="color: #4CAF50; margin-bottom: 10px;">Congratulations!</h3>
-                <p style="font-size: 1.2em; margin-bottom: 20px;">
-                    You've mastered all available items in all modes!
-                </p>
-                <p style="color: #666;">
-                    Final Score: ${this.state.getScore()} / ${this.state.getTotal()}
-                </p>
-            </div>
-        `;
-        
-        // Hide all other UI elements
-        this.elements.wordContainer.innerHTML = '';
-        this.elements.optionsContainer.innerHTML = '';
-        this.elements.feedback.classList.add('hidden');
-        this.elements.nextBtn.classList.add('hidden');
-    }
-
-    /**
-     * Display question based on mode
-     * @param {Object} question - Question object
-     */
-    displayQuestion(question) {
-        UI.clearQuestionDisplay();
-        
-        switch (question.mode) {
-            case 1:
-                this.displayMode1(question);
-                break;
-            case 2:
-                this.displayMode2(question);
-                break;
-            case 3:
-                this.displayMode3(question);
-                break;
-            case 4:
-                this.displayMode4(question);
-                break;
-            case 5:
-                this.displayMode5(question);
-                break;
-        }
-    }
-
-    /**
-     * Display Mode 1: Georgian letter -> Russian letter
-     * @param {Object} question - Question object
-     */
-    displayMode1(question) {
-        // Get additional info from dictionary
-        const hintText = this.buildLetterHint(question.questionLetter, question.correctAnswer, true);
-        UI.displayQuestionWithHint(question.questionLetter, hintText, true);
-        
-        // Move feedback and next button to word container
-        this.elements.wordContainer.appendChild(this.elements.feedback);
-        this.elements.wordContainer.appendChild(this.elements.nextBtn);
-        
-        UI.displayOptions(question.options, (answer) => {
-            this.handleMultipleChoiceAnswer(answer, question.correctAnswer);
+    _initializeItems() {
+        this.allItems.forEach(item => {
+            this.itemState.set(item.id, {
+                item,
+                successCount: 0,
+                lastSeen: 0
+            });
         });
     }
 
     /**
-     * Display Mode 2: Russian letter -> Georgian letter
-     * @param {Object} question - Question object
+     * Получить элементы, которые ещё не выучены
+     * @private
+     * @returns {Array}
      */
-    displayMode2(question) {
-        // Get additional info from dictionary
-        const hintText = this.buildLetterHint(question.correctAnswer, question.questionLetter, false);
-        UI.displayQuestionWithHint(question.questionLetter, hintText, true);
-        
-        // Move feedback and next button to word container
-        this.elements.wordContainer.appendChild(this.elements.feedback);
-        this.elements.wordContainer.appendChild(this.elements.nextBtn);
-        
-        UI.displayOptions(question.options, (answer) => {
-            this.handleMultipleChoiceAnswer(answer, question.correctAnswer);
+    _getUnlearnedItems() {
+        return this.allItems.filter(item => {
+            const state = this.itemState.get(item.id);
+            return state.successCount < GameSession.SUCCESS_LIMIT;
         });
     }
 
     /**
-     * Display Mode 3: Word translation
-     * @param {Object} question - Question object
+     * Заполнить буфер до размера BUFFER_SIZE
+     * @private
      */
-    displayMode3(question) {
-        const questionText = `${question.word}`;
-        UI.displayQuestionWithHint(questionText, `Hint: ${question.translation}`, false);
-        
-        UI.displayWordMode3(
-            question,
-            (letter, btn) => this.handleLetterClick(letter, btn),
-            () => this.handleClear(),
-            () => this.handleMode3Submit()
+    _fillBuffer() {
+        const unlearned = this._getUnlearnedItems();
+        const notInBuffer = unlearned.filter(
+            item => !this.activeBuffer.some(b => b.id === item.id)
         );
-        
-        UI.updateAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
-    }
 
-    /**
-     * Display Mode 4: Type the answer
-     * @param {Object} question - Question object
-     */
-    displayMode4(question) {
-        // Get additional info from dictionary
-        const isGeorgianLetter = question.direction === 'georgian-to-russian';
-        let hintText;
-        if (isGeorgianLetter) {
-            hintText = this.buildLetterHint(question.questionLetter, question.correctAnswer, true);
-        } else {
-            hintText = this.buildLetterHint(question.correctAnswer, question.questionLetter, false);
+        while (this.activeBuffer.length < GameSession.BUFFER_SIZE && notInBuffer.length > 0) {
+            // Выбираем элемент с наименьшим lastSeen
+            notInBuffer.sort((a, b) => {
+                const stateA = this.itemState.get(a.id);
+                const stateB = this.itemState.get(b.id);
+                return stateA.lastSeen - stateB.lastSeen;
+            });
+            const next = notInBuffer.shift();
+            if (next) {
+                this.activeBuffer.push(next);
+            }
         }
-        // In typing mode, don't use large letter styling
-        UI.displayQuestionWithHint(question.questionLetter, hintText, false);
-        UI.displayTypingMode(() => this.handleTypingSubmit());
     }
 
     /**
-     * Display Mode 5: Phrase translation (Russian -> Georgian words)
-     * @param {Object} question - Question object
+     * Получить случайный элемент из буфера (с интервалом между повторами)
+     * @returns {Object|null}
      */
-    displayMode5(question) {
-        const questionText = `${question.russianPhrase}`;
-        UI.displayQuestionWithHint(questionText, `Hint: ${question.georgianPhrase}`, false);
+    getNextItem() {
+        if (this.activeBuffer.length === 0) {
+            return null;
+        }
+
+        // Фильтруем буфер, исключая недавно показанные элементы
+        let candidates = this.activeBuffer;
+        if (this.recentItemIds.length > 0 && this.activeBuffer.length > 1) {
+            candidates = this.activeBuffer.filter(item => !this.recentItemIds.includes(item.id));
+        }
+
+        // Если после фильтрации не осталось кандидатов, берём весь буфер
+        if (candidates.length === 0) {
+            candidates = this.activeBuffer;
+        }
+
+        const idx = Utils.getRandomInt(0, candidates.length);
+        const item = candidates[idx];
+        const state = this.itemState.get(item.id);
+        state.lastSeen = Date.now();
         
-        UI.displayPhraseMode5(
-            question,
-            (word, btn) => this.handleWordClick(word, btn),
-            () => this.handleClearPhrase(),
-            () => this.handleMode5Submit()
-        );
+        // Добавляем ID в историю и ограничиваем её размер
+        this.recentItemIds.push(item.id);
+        if (this.recentItemIds.length > GameSession.MIN_REPEAT_INTERVAL) {
+            this.recentItemIds.shift();
+        }
         
-        UI.updatePhraseAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
+        return item;
     }
 
     /**
-     * Handle multiple choice answer (Mode 1 & 2)
-     * @param {string} userAnswer - User's answer
-     * @param {string} correctAnswer - Correct answer
+     * Обработать результат ответа
+     * @param {string} itemId - ID элемента
+     * @param {boolean} isCorrect - Правильный ли ответ
      */
-    handleMultipleChoiceAnswer(userAnswer, correctAnswer) {
-        const isCorrect = userAnswer === correctAnswer;
-        
-        UI.highlightOptions(userAnswer, correctAnswer);
-        
-        // Update score
+    processAnswer(itemId, isCorrect) {
+        const state = this.itemState.get(itemId);
+        if (!state) return;
+
         if (isCorrect) {
-            this.state.incrementScore();
+            state.successCount++;
+            // Если выучен — убираем из буфера
+            if (state.successCount >= GameSession.SUCCESS_LIMIT) {
+                this.activeBuffer = this.activeBuffer.filter(b => b.id !== itemId);
+                this._fillBuffer();
+            }
         } else {
-            this.state.incrementTotal();
+            // При ошибке сбрасываем счётчик
+            state.successCount = 0;
         }
-        UI.updateStats(this.state.getScore(), this.state.getTotal());
-        
-        // Record answer in memory system
-        const question = this.state.getCurrentQuestion();
-        if (question && question.itemKey) {
-            this.state.recordAnswer(question.mode, question.itemKey, isCorrect);
-        }
-        
-        UI.showFeedback(isCorrect, correctAnswer);
+
+        this.questionHistory.push({
+            itemId,
+            isCorrect,
+            timestamp: Date.now()
+        });
     }
 
     /**
-     * Handle typing submission (Mode 4)
+     * Проверить, завершена ли сессия
+     * @returns {boolean}
      */
-    handleTypingSubmit() {
-        const userAnswer = UI.getTypingInputValue();
-        if (!userAnswer) return;
-        
-        const question = this.state.getCurrentQuestion();
-        const correctAnswer = question.correctAnswer.toLowerCase();
-        const isCorrect = userAnswer === correctAnswer;
-        
-        // Update score
-        if (isCorrect) {
-            this.state.incrementScore();
-        } else {
-            this.state.incrementTotal();
-        }
-        UI.updateStats(this.state.getScore(), this.state.getTotal());
-        
-        // Record answer in memory system
-        if (question && question.itemKey) {
-            this.state.recordAnswer(question.mode, question.itemKey, isCorrect);
-        }
-        
-        UI.showFeedback(isCorrect, question.correctAnswer);
+    isComplete() {
+        return this._getUnlearnedItems().length === 0;
     }
 
     /**
-     * Handle letter click in Mode 3
-     * @param {string} letter - Clicked letter
-     * @param {HTMLElement} btn - Button element
+     * Получить статистику сессии
+     * @returns {Object}
      */
-    handleLetterClick(letter, btn) {
-        const question = this.state.getCurrentQuestion();
-        question.userAnswer.push(letter);
-        btn.classList.add('used');
-        btn.disabled = true;
-        UI.updateAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
+    getStats() {
+        const total = this.allItems.length;
+        const learned = this.allItems.filter(item => {
+            const state = this.itemState.get(item.id);
+            return state.successCount >= GameSession.SUCCESS_LIMIT;
+        }).length;
+        const totalQuestions = this.questionHistory.length;
+        const correctAnswers = this.questionHistory.filter(q => q.isCorrect).length;
+
+        return {
+            total,
+            learned,
+            remaining: total - learned,
+            accuracy: totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0,
+            totalQuestions
+        };
     }
 
     /**
-     * Handle clear button in Mode 3
+     * Установить текущий вопрос
+     * @param {Object} question
      */
-    handleClear() {
-        const question = this.state.getCurrentQuestion();
-        question.userAnswer = [];
-        UI.clearLetterSelection();
-        UI.updateAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
+    setCurrentQuestion(question) {
+        this.currentQuestion = question;
     }
 
     /**
-     * Handle Mode 3 submission
+     * Получить текущий вопрос
+     * @returns {Object|null}
      */
-    handleMode3Submit() {
-        const question = this.state.getCurrentQuestion();
-        
-        if (question.submitted) return;
-        if (question.userAnswer.length === 0) return;
-        
-        question.submitted = true;
-        
-        // Check if answer is correct
-        const isCorrect = question.userAnswer.length === question.correctAnswer.length &&
-                          question.userAnswer.every((letter, index) => letter === question.correctAnswer[index]);
-        
-        // Update score
-        if (isCorrect) {
-            this.state.incrementScore();
-        } else {
-            this.state.incrementTotal();
-        }
-        UI.updateStats(this.state.getScore(), this.state.getTotal());
-        
-        // Record answer in memory system
-        if (question && question.itemKey) {
-            this.state.recordAnswer(question.mode, question.itemKey, isCorrect);
-        }
-        
-        // Hide controls
-        UI.hideWordControls();
-        
-        // Update answer display
-        UI.updateAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
-        
-        // Show feedback
-        const correctWord = question.correctAnswer.join('');
-        UI.showFeedback(isCorrect, correctWord);
-    }
-
-    /**
-     * Handle word click in Mode 5
-     * @param {string} word - Clicked word
-     * @param {HTMLElement} btn - Button element
-     */
-    handleWordClick(word, btn) {
-        const question = this.state.getCurrentQuestion();
-        question.userAnswer.push(word);
-        btn.classList.add('used');
-        btn.disabled = true;
-        UI.updatePhraseAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
-    }
-
-    /**
-     * Handle clear button in Mode 5
-     */
-    handleClearPhrase() {
-        const question = this.state.getCurrentQuestion();
-        question.userAnswer = [];
-        UI.clearWordSelection();
-        UI.updatePhraseAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
-    }
-
-    /**
-     * Handle Mode 5 submission
-     */
-    handleMode5Submit() {
-        const question = this.state.getCurrentQuestion();
-        
-        if (question.submitted) return;
-        if (question.userAnswer.length === 0) return;
-        
-        question.submitted = true;
-        
-        // Check if answer is correct
-        const isCorrect = question.userAnswer.length === question.correctAnswer.length &&
-                          question.userAnswer.every((word, index) => word === question.correctAnswer[index]);
-        
-        // Update score
-        if (isCorrect) {
-            this.state.incrementScore();
-        } else {
-            this.state.incrementTotal();
-        }
-        UI.updateStats(this.state.getScore(), this.state.getTotal());
-        
-        // Record answer in memory system
-        if (question && question.itemKey) {
-            this.state.recordAnswer(question.mode, question.itemKey, isCorrect);
-        }
-        
-        // Hide controls
-        UI.hideWordControls();
-        
-        // Update answer display
-        UI.updatePhraseAnswerDisplay(question.userAnswer, question.correctAnswer, question.submitted);
-        
-        // Show feedback
-        const correctPhrase = question.correctAnswer.join(' ');
-        UI.showFeedback(isCorrect, correctPhrase);
+    getCurrentQuestion() {
+        return this.currentQuestion;
     }
 }

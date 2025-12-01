@@ -1,14 +1,14 @@
-// Entry point for the Georgian Alphabet Trainer
-import { Game } from './game.js';
+/**
+ * Entry Point — Точка входа приложения
+ * =====================================
+ * Инициализация приложения после загрузки DOM
+ */
 
-// Initialize game when DOM is ready
+'use strict';
+
+import { App } from './app.js';
+
+// Запуск приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
-    const game = new Game();
-    game.initialize();
-    
-    // Expose game instance and helper functions for debugging (use in console)
-    window.game = game;
-    window.showMemory = () => game.state.logMemoryState();
-    window.getMemory = (mode) => mode ? game.state.memory[mode] : game.state.memory;
-    window.getHistory = (mode) => mode ? game.state.recentHistory[mode] : game.state.recentHistory;
+    window.app = new App();
 });
