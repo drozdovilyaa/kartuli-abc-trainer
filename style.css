@@ -69,6 +69,32 @@ body {
         flex-shrink: 0;
         max-height: 40vh;
     }
+    
+    /* Когда клавиатура открыта — input area становится fixed */
+    .keyboard-open .answer-bottom {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: var(--keyboard-height, 0px);
+        max-height: none;
+        z-index: 100;
+        border-radius: 1rem 1rem 0 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .keyboard-open .action-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: var(--keyboard-height, 0px);
+        z-index: 101;
+        transform: translateY(100%);
+        display: none;
+    }
+    
+    .keyboard-open .question-center {
+        padding-bottom: 150px; /* Space for fixed input */
+    }
 }
 
 /* Screens */
@@ -126,14 +152,14 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Question Center — vertically centered */
+/* Question Center — at top */
 .question-center {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: 2rem 1.5rem;
     text-align: center;
     min-height: 200px;
 }

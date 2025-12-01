@@ -89,6 +89,34 @@ export class App {
                 this._handleSubmit();
             }
         });
+
+        // Отслеживание виртуальной клавиатуры на мобильных
+        this._setupKeyboardTracking();
+    }
+
+    /**
+     * Настройка отслеживания клавиатуры через visualViewport API
+     * @private
+     */
+    _setupKeyboardTracking() {
+        if (!window.visualViewport) return;
+
+        const updateKeyboardHeight = () => {
+            const keyboardHeight = window.innerHeight - window.visualViewport.height;
+            
+            if (keyboardHeight > 100) {
+                // Клавиатура открыта
+                document.body.classList.add('keyboard-open');
+                document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`);
+            } else {
+                // Клавиатура закрыта
+                document.body.classList.remove('keyboard-open');
+                document.documentElement.style.setProperty('--keyboard-height', '0px');
+            }
+        };
+
+        window.visualViewport.addEventListener('resize', updateKeyboardHeight);
+        window.visualViewport.addEventListener('scroll', updateKeyboardHeight);
     }
 
     /**
