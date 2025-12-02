@@ -11,6 +11,7 @@ import { DataRepository } from './state.js';
 import { GameSession } from './game.js';
 import { QuestionRendererFactory } from './questionGenerator.js';
 import { UIManager } from './ui.js';
+import { Logger } from './logger.js';
 
 /**
  * App — Главный класс приложения
@@ -139,6 +140,8 @@ export class App {
      * @private
      */
     _handleAction(action, target) {
+        Logger.action(`Действие: ${action}`);
+        
         switch (action) {
             case 'start-letters':
                 this._startGame('letters');
@@ -162,7 +165,9 @@ export class App {
      */
     _startGame(mode) {
         this.session = new GameSession(mode);
+        Logger.sessionStarted(mode, this.session.allItems.length);
         this.ui.showScreen('game');
+        Logger.screenChanged('game');
         this._nextQuestion();
     }
 
@@ -177,6 +182,7 @@ export class App {
         }
         this.session = null;
         this.ui.showScreen('home');
+        Logger.screenChanged('home');
     }
 
     /**
@@ -186,12 +192,18 @@ export class App {
     _nextQuestion() {
         if (!this.session) return;
 
+        Logger.game('⏭️ Переход к следующему вопросу');
+
         // Обновляем прогресс
-        this.ui.updateProgress(this.session.getStats());
+        const stats = this.session.getStats();
+        this.ui.updateProgress(stats);
+        Logger.data('Статистика', stats);
 
         // Проверяем завершение
         if (this.session.isComplete()) {
-            this.ui.showResults(this.session.getStats());
+            Logger.sessionEnded(stats);
+            this.ui.showResults(stats);
+            Logger.screenChanged('result');
             return;
         }
 
@@ -201,18 +213,22 @@ export class App {
         // Получаем следующий элемент
         const item = this.session.getNextItem();
         if (!item) {
-            this.ui.showResults(this.session.getStats());
+            Logger.sessionEnded(stats);
+            this.ui.showResults(stats);
+            Logger.screenChanged('result');
             return;
         }
 
         // Выбираем шаблон вопроса
         const template = this._selectTemplate(item);
+        Logger.game(`📋 Выбран шаблон: ${template}`, { itemType: item.type });
         
         // Для шаблонов word_assembly и translit_input берём случайное слово
         let renderItem = item;
         if (item.type === 'letter' && (template === 'word_assembly' || template === 'translit_input')) {
             const simpleWords = DataRepository.getSimpleWords();
             renderItem = simpleWords[Utils.getRandomInt(0, simpleWords.length)];
+            Logger.data('Использовано простое слово для шаблона', { word: renderItem });
         }
         
         const renderer = QuestionRendererFactory.getRenderer(template);
@@ -222,6 +238,8 @@ export class App {
             // Сохраняем оригинальный itemId для учёта прогресса буквы
             questionData.itemId = item.id;
             this.session.setCurrentQuestion(questionData);
+            
+            Logger.questionShown(item, template, questionData);
             
             // Устанавливаем кнопки в action bar для мобильных
             if (questionData.type === 'assembly' || questionData.type === 'phrase_assembly') {
@@ -271,8 +289,13 @@ export class App {
         const question = this.session?.getCurrentQuestion();
         if (!question) return;
 
+        Logger.action('Выбран вариант ответа', { answer });
+
         const isCorrect = answer === question.correctAnswer;
         this.session.processAnswer(question.itemId, isCorrect);
+        
+        Logger.answerGiven(answer, question.correctAnswer, isCorrect);
+        
         this.ui.highlightChoice(answer, question.correctAnswer, isCorrect);
 
         this._scheduleNextOrShowButton(isCorrect);
@@ -285,6 +308,8 @@ export class App {
     _handleSubmit() {
         const question = this.session?.getCurrentQuestion();
         if (!question) return;
+
+        Logger.action('Нажата кнопка "Проверить"', { questionType: question.type });
 
         let userAnswer = '';
         
@@ -305,6 +330,8 @@ export class App {
             ? userAnswer.replace(/[?.!,]/g, '') === correctNormalized.replace(/[?.!,]/g, '')
             : userAnswer === correctNormalized;
 
+        Logger.answerGiven(userAnswer, question.correctAnswer, isCorrect);
+
         this.session.processAnswer(question.itemId, isCorrect);
 
         if (question.type === 'input') {
@@ -324,9 +351,11 @@ export class App {
     _scheduleNextOrShowButton(isCorrect) {
         if (isCorrect) {
             // При успехе — авто-переход через 1 сек
+            Logger.game('⏱️ Авто-переход через 1.2 сек');
             this._scheduleNextQuestion();
         } else {
             // При ошибке — показать кнопку "Далее" в action bar
+            Logger.game('🔘 Показана кнопка "Далее"');
             this.ui.setActionButtons('next');
         }
     }

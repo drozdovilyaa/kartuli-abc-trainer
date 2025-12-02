@@ -8,6 +8,7 @@
 
 import { Utils } from './utils.js';
 import { DataRepository } from './state.js';
+import { Logger } from './logger.js';
 
 /**
  * GameSession — Управление сессией обучения
@@ -41,6 +42,12 @@ export class GameSession {
 
         this._initializeItems();
         this._fillBuffer();
+        
+        Logger.data('Сессия инициализирована', {
+            mode,
+            totalItems: this.allItems.length,
+            bufferSize: this.activeBuffer.length
+        });
     }
 
     /**
@@ -124,6 +131,8 @@ export class GameSession {
             this.recentItemIds.shift();
         }
         
+        Logger.nextItemSelected(item, candidates, [...this.recentItemIds]);
+        
         return item;
     }
 
@@ -136,17 +145,35 @@ export class GameSession {
         const state = this.itemState.get(itemId);
         if (!state) return;
 
+        const oldCount = state.successCount;
+
         if (isCorrect) {
             state.successCount++;
             // Если выучен — убираем из буфера
             if (state.successCount >= GameSession.SUCCESS_LIMIT) {
+                Logger.game('🎓 Элемент выучен!', { 
+                    itemId, 
+                    geo: state.item.geo, 
+                    rus: state.item.rus 
+                });
                 this.activeBuffer = this.activeBuffer.filter(b => b.id !== itemId);
                 this._fillBuffer();
+                Logger.data('Буфер обновлён', { 
+                    bufferSize: this.activeBuffer.length,
+                    bufferItems: this.activeBuffer.map(i => i.geo)
+                });
             }
         } else {
             // При ошибке сбрасываем счётчик
             state.successCount = 0;
         }
+
+        Logger.progressUpdated(
+            itemId, 
+            oldCount, 
+            state.successCount, 
+            state.successCount >= GameSession.SUCCESS_LIMIT
+        );
 
         this.questionHistory.push({
             itemId,

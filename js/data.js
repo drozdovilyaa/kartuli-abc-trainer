@@ -140,19 +140,5 @@ export const MOCK_DATA = {
             geo_words_shuffled: ["სკოლაა", "ჩვენი", "ეს"],
             type: "phrase"
         }
-    ],
-
-    // Простые слова для режима букв (word_assembly, translit_input)
-    simpleWords: [
-        { id: "sw1", geo: "მამა", translit: "мама", rus: "отец" },
-        { id: "sw2", geo: "დედა", translit: "дэда", rus: "мать" },
-        { id: "sw3", geo: "კატა", translit: "ката", rus: "кошка" },
-        { id: "sw4", geo: "სახლი", translit: "сахли", rus: "дом" },
-        { id: "sw5", geo: "წიგნი", translit: "цигни", rus: "книга" },
-        { id: "sw6", geo: "ვარ", translit: "вар", rus: "есть (я)" },
-        { id: "sw7", geo: "და", translit: "да", rus: "и / сестра" },
-        { id: "sw8", geo: "არის", translit: "арис", rus: "есть (он/она)" },
-        { id: "sw9", geo: "კარგი", translit: "карги", rus: "хороший" },
-        { id: "sw10", geo: "დიდი", translit: "диди", rus: "большой" }
     ]
 };

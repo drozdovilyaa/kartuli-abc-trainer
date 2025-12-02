@@ -75,10 +75,10 @@ export class DataRepository {
     }
 
     /**
-     * Получить простые слова (для режима букв)
-     * @returns {Array} - Массив простых слов с транслитерацией
+     * Получить слова (для режима букв - word_assembly, translit_input)
+     * @returns {Array} - Массив слов с транслитерацией
      */
     static getSimpleWords() {
-        return [...MOCK_DATA.simpleWords];
+        return [...MOCK_DATA.words];
     }
 }
