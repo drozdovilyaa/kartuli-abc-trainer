@@ -99,6 +99,22 @@ export class UIManager {
     }
 
     /**
+     * Обновить состояние кнопки "Проверить" (disabled/enabled)
+     * @param {boolean} enabled - Активна ли кнопка
+     */
+    updateSubmitButton(enabled) {
+        const submitBtn = document.getElementById('submit-btn');
+        const submitBtnMobile = document.getElementById('submit-btn-mobile');
+        
+        if (submitBtn) {
+            submitBtn.disabled = !enabled;
+        }
+        if (submitBtnMobile) {
+            submitBtnMobile.disabled = !enabled;
+        }
+    }
+
+    /**
      * Обновить прогресс
      * @param {Object} stats - Статистика сессии
      */
@@ -263,6 +279,9 @@ export class UIManager {
 
         zone.appendChild(span);
         sourceBtn.disabled = true;
+        
+        // Включаем кнопку "Проверить", если есть элементы
+        this.updateSubmitButton(this.assemblyState.length > 0);
     }
 
     /**
@@ -298,6 +317,9 @@ export class UIManager {
                 placeholder.classList.remove('d-none');
             }
         }
+        
+        // Обновляем состояние кнопки "Проверить"
+        this.updateSubmitButton(this.assemblyState.length > 0);
     }
 
     /**
@@ -323,6 +345,9 @@ export class UIManager {
         }
 
         this.assemblyState = [];
+        
+        // Выключаем кнопку "Проверить"
+        this.updateSubmitButton(false);
     }
 
     /**

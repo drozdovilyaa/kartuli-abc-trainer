@@ -91,6 +91,14 @@ export class App {
             }
         });
 
+        // Обработка ввода в input — включение/выключение кнопки "Проверить"
+        document.addEventListener('input', (e) => {
+            if (e.target.id === 'answer-input') {
+                const hasValue = e.target.value.trim().length > 0;
+                this.ui.updateSubmitButton(hasValue);
+            }
+        });
+
         // Отслеживание виртуальной клавиатуры на мобильных
         this._setupKeyboardTracking();
     }
@@ -244,8 +252,10 @@ export class App {
             // Устанавливаем кнопки в action bar для мобильных
             if (questionData.type === 'assembly' || questionData.type === 'phrase_assembly') {
                 this.ui.setActionButtons('assembly');
+                this.ui.updateSubmitButton(false); // Изначально выключена
             } else if (questionData.type === 'input') {
                 this.ui.setActionButtons('submit');
+                this.ui.updateSubmitButton(false); // Изначально выключена
             } else {
                 this.ui.setActionButtons(''); // choice — без кнопок
             }
