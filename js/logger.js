@@ -8,7 +8,7 @@
 
 export class Logger {
     /** Enable/disable logging */
-    static ENABLED = true;
+    static ENABLED = false;
     
     /** Logging levels */
     static LEVELS = {
