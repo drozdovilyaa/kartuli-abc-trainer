@@ -18,9 +18,9 @@ export class GameSession {
     /** Number of successes to exclude an item */
     static SUCCESS_LIMIT = 3;
     /** Size of active items buffer */
-    static BUFFER_SIZE = 5;
+    static BUFFER_SIZE = 10;
     /** Minimum interval between repeats (how many other items to show) */
-    static MIN_REPEAT_INTERVAL = 3;
+    static MIN_REPEAT_INTERVAL = 5;
 
     /**
      * @param {string} mode - Mode: 'letters' or 'words'
