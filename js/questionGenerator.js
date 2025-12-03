@@ -57,7 +57,8 @@ export class QuestionRendererFactory {
         // Build hint text with both translation and transliteration if available
         let hintText = '';
         if (translation) hintText += translation;
-        if (translit) hintText += (hintText ? ' • ' : '') + `[${translit}]`;
+        // TODO: Temporarily disabled transliteration in hints
+        // if (translit) hintText += (hintText ? ' • ' : '') + `[${translit}]`;
         
         return `
             <button class="btn btn-sm btn-outline-warning ms-2" id="hint-btn" 
