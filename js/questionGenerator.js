@@ -1,7 +1,7 @@
 /**
- * Presentation Layer — Генератор вопросов
+ * Presentation Layer — Question Generator
  * ========================================
- * Фабрика для создания рендереров различных типов вопросов
+ * Factory for creating renderers for various question types
  */
 
 'use strict';
@@ -10,16 +10,16 @@ import { Utils } from './utils.js';
 import { DataRepository } from './state.js';
 
 /**
- * QuestionRendererFactory — Фабрика рендереров вопросов
- * Создаёт DOM-элементы для разных шаблонов вопросов (Bootstrap 5.3)
+ * QuestionRendererFactory — Question Renderers Factory
+ * Creates DOM elements for different question templates (Bootstrap 5.3)
  */
 export class QuestionRendererFactory {
-    /** Массив классов грузинских шрифтов */
+    /** Array of Georgian font classes */
     static GEO_FONTS = ['geo-font-1', 'geo-font-2', 'geo-font-3'];
 
     /**
-     * Получить случайный класс грузинского шрифта
-     * @returns {string} CSS класс шрифта
+     * Get random Georgian font class
+     * @returns {string} CSS font class
      */
     static getRandomFontClass() {
         const index = Math.floor(Math.random() * QuestionRendererFactory.GEO_FONTS.length);
@@ -27,9 +27,9 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Получить рендерер по типу шаблона
-     * @param {string} template - Тип шаблона
-     * @returns {Function} - Функция-рендерер
+     * Get renderer by template type
+     * @param {string} template - Template type
+     * @returns {Function} - Renderer function
      */
     static getRenderer(template) {
         const renderers = {
@@ -46,9 +46,9 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Генерирует HTML для кнопки подсказки (открывает модалку)
-     * @param {string} translation - Текст перевода
-     * @returns {string} HTML строка
+     * Generates HTML for hint button (opens modal)
+     * @param {string} translation - Translation text
+     * @returns {string} HTML string
      */
     static renderHintButton(translation) {
         if (!translation) return '';
@@ -60,11 +60,11 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Выбор русского перевода по грузинскому
+     * Template: Choose Russian translation by Georgian
      */
     static renderChoiceGeoRus(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
-        // Фильтруем только элементы с полем rus (исключаем фразы с rus_phrase)
+        // Filter only items with rus field (exclude phrases with rus_phrase)
         const others = allItems.filter(i => i.rus && i.rus !== correctAnswer);
         const distractors = Utils.getRandomElements(others, 3).map(i => i.rus);
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
@@ -89,11 +89,11 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Выбор грузинского по русскому
+     * Template: Choose Georgian by Russian
      */
     static renderChoiceRusGeo(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo;
-        // Фильтруем только элементы с полем geo (исключаем некорректные)
+        // Filter only items with geo field (exclude invalid)
         const others = allItems.filter(i => i.geo && i.geo !== correctAnswer);
         const distractors = Utils.getRandomElements(others, 3).map(i => i.geo);
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
@@ -118,7 +118,7 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Ввод русской буквы по грузинской
+     * Template: Input Russian letter by Georgian
      */
     static renderInputGeoRus(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
@@ -147,7 +147,7 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Ввод грузинского по русскому
+     * Template: Input Georgian by Russian
      */
     static renderInputRusGeo(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo;
@@ -175,14 +175,14 @@ export class QuestionRendererFactory {
         return { type: 'input', correctAnswer, itemId: item.id };
     }
     /**
-     * Шаблон: Сборка слова из букв (транслитерация → грузинский)
+     * Template: Word assembly from letters (transliteration → Georgian)
      */
     static renderWordAssembly(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo;
         const geoLetters = item.geo.split('');
         const fontClass = QuestionRendererFactory.getRandomFontClass();
         
-        // Добавляем случайные буквы-дистракторы
+        // Add random distractor letters
         const allLetters = DataRepository.getAllLetters();
         const distractors = Utils.getRandomElements(
             allLetters.filter(l => !geoLetters.includes(l.geo)),
@@ -225,7 +225,7 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Ввод транслитерации грузинского слова
+     * Template: Input transliteration of Georgian word
      */
     static renderTranslitInput(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.translit;
@@ -255,11 +255,11 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Ввод перевода слова (подсказка — русский перевод)
+     * Template: Input word translation (hint — Russian translation)
      */
     static renderTranslateInput(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
-        // Подсказка показывает русский перевод
+        // Hint shows Russian translation
         const hintBtn = QuestionRendererFactory.renderHintButton(item.rus);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
 
@@ -286,7 +286,7 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Сборка фразы из слов
+     * Template: Phrase assembly from words
      */
     static renderPhraseAssembly(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo_phrase;

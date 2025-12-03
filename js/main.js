@@ -1,14 +1,14 @@
 /**
- * Entry Point — Точка входа приложения
+ * Entry Point — Application Entry Point
  * =====================================
- * Инициализация приложения после загрузки DOM
+ * Application initialization after DOM load
  */
 
 'use strict';
 
 import { App } from './app.js';
 
-// Запуск приложения после загрузки DOM
+// Start application after DOM load
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new App();
 });

@@ -1,7 +1,7 @@
 /**
- * Game Core Layer — Логика игровой сессии
+ * Game Core Layer — Game Session Logic
  * ========================================
- * Класс для управления состоянием игры и spaced repetition
+ * Class for managing game state and spaced repetition
  */
 
 'use strict';
@@ -11,39 +11,39 @@ import { DataRepository } from './state.js';
 import { Logger } from './logger.js';
 
 /**
- * GameSession — Управление сессией обучения
- * Реализует алгоритм spaced repetition с буфером
+ * GameSession — Learning Session Management
+ * Implements spaced repetition algorithm with buffer
  */
 export class GameSession {
-    /** Количество успехов для исключения элемента */
+    /** Number of successes to exclude an item */
     static SUCCESS_LIMIT = 3;
-    /** Размер буфера активных элементов */
+    /** Size of active items buffer */
     static BUFFER_SIZE = 5;
-    /** Минимальный интервал между повторами (сколько других элементов показать) */
+    /** Minimum interval between repeats (how many other items to show) */
     static MIN_REPEAT_INTERVAL = 3;
 
     /**
-     * @param {string} mode - Режим: 'letters' или 'words'
+     * @param {string} mode - Mode: 'letters' or 'words'
      */
     constructor(mode) {
         this.mode = mode;
-        /** Все элементы для изучения (перемешанные) */
+        /** All items for learning (shuffled) */
         this.allItems = Utils.shuffleArray(DataRepository.getData(mode));
         /** Map<id, {item, successCount, lastSeen}> */
         this.itemState = new Map();
-        /** Текущий буфер активных элементов */
+        /** Current buffer of active items */
         this.activeBuffer = [];
-        /** История вопросов для анализа */
+        /** Question history for analysis */
         this.questionHistory = [];
-        /** Текущий вопрос */
+        /** Current question */
         this.currentQuestion = null;
-        /** История последних показанных ID (для интервала между повторами) */
+        /** History of recently shown IDs (for repeat interval) */
         this.recentItemIds = [];
 
         this._initializeItems();
         this._fillBuffer();
         
-        Logger.data('Сессия инициализирована', {
+        Logger.data('Session initialized', {
             mode,
             totalItems: this.allItems.length,
             bufferSize: this.activeBuffer.length
@@ -51,7 +51,7 @@ export class GameSession {
     }
 
     /**
-     * Инициализировать состояние всех элементов
+     * Initialize state for all items
      * @private
      */
     _initializeItems() {
@@ -65,7 +65,7 @@ export class GameSession {
     }
 
     /**
-     * Получить элементы, которые ещё не выучены
+     * Get items that are not yet learned
      * @private
      * @returns {Array}
      */
@@ -77,7 +77,7 @@ export class GameSession {
     }
 
     /**
-     * Заполнить буфер до размера BUFFER_SIZE
+     * Fill buffer up to BUFFER_SIZE
      * @private
      */
     _fillBuffer() {
@@ -87,7 +87,7 @@ export class GameSession {
         );
 
         while (this.activeBuffer.length < GameSession.BUFFER_SIZE && notInBuffer.length > 0) {
-            // Выбираем элемент с наименьшим lastSeen
+            // Select item with lowest lastSeen
             notInBuffer.sort((a, b) => {
                 const stateA = this.itemState.get(a.id);
                 const stateB = this.itemState.get(b.id);
@@ -101,7 +101,7 @@ export class GameSession {
     }
 
     /**
-     * Получить случайный элемент из буфера (с интервалом между повторами)
+     * Get random item from buffer (with repeat interval)
      * @returns {Object|null}
      */
     getNextItem() {
@@ -109,13 +109,13 @@ export class GameSession {
             return null;
         }
 
-        // Фильтруем буфер, исключая недавно показанные элементы
+        // Filter buffer, excluding recently shown items
         let candidates = this.activeBuffer;
         if (this.recentItemIds.length > 0 && this.activeBuffer.length > 1) {
             candidates = this.activeBuffer.filter(item => !this.recentItemIds.includes(item.id));
         }
 
-        // Если после фильтрации не осталось кандидатов, берём весь буфер
+        // If no candidates after filtering, use entire buffer
         if (candidates.length === 0) {
             candidates = this.activeBuffer;
         }
@@ -125,7 +125,7 @@ export class GameSession {
         const state = this.itemState.get(item.id);
         state.lastSeen = Date.now();
         
-        // Добавляем ID в историю и ограничиваем её размер
+        // Add ID to history and limit its size
         this.recentItemIds.push(item.id);
         if (this.recentItemIds.length > GameSession.MIN_REPEAT_INTERVAL) {
             this.recentItemIds.shift();
@@ -137,9 +137,9 @@ export class GameSession {
     }
 
     /**
-     * Обработать результат ответа
-     * @param {string} itemId - ID элемента
-     * @param {boolean} isCorrect - Правильный ли ответ
+     * Process answer result
+     * @param {string} itemId - Item ID
+     * @param {boolean} isCorrect - Whether answer is correct
      */
     processAnswer(itemId, isCorrect) {
         const state = this.itemState.get(itemId);
@@ -149,22 +149,22 @@ export class GameSession {
 
         if (isCorrect) {
             state.successCount++;
-            // Если выучен — убираем из буфера
+            // If learned — remove from buffer
             if (state.successCount >= GameSession.SUCCESS_LIMIT) {
-                Logger.game('🎓 Элемент выучен!', { 
+                Logger.game('🎓 Item learned!', { 
                     itemId, 
                     geo: state.item.geo, 
                     rus: state.item.rus 
                 });
                 this.activeBuffer = this.activeBuffer.filter(b => b.id !== itemId);
                 this._fillBuffer();
-                Logger.data('Буфер обновлён', { 
+                Logger.data('Buffer updated', { 
                     bufferSize: this.activeBuffer.length,
                     bufferItems: this.activeBuffer.map(i => i.geo)
                 });
             }
         } else {
-            // При ошибке сбрасываем счётчик
+            // On error reset counter
             state.successCount = 0;
         }
 
@@ -183,7 +183,7 @@ export class GameSession {
     }
 
     /**
-     * Проверить, завершена ли сессия
+     * Check if session is complete
      * @returns {boolean}
      */
     isComplete() {
@@ -191,7 +191,7 @@ export class GameSession {
     }
 
     /**
-     * Получить статистику сессии
+     * Get session statistics
      * @returns {Object}
      */
     getStats() {
@@ -213,7 +213,7 @@ export class GameSession {
     }
 
     /**
-     * Установить текущий вопрос
+     * Set current question
      * @param {Object} question
      */
     setCurrentQuestion(question) {
@@ -221,7 +221,7 @@ export class GameSession {
     }
 
     /**
-     * Получить текущий вопрос
+     * Get current question
      * @returns {Object|null}
      */
     getCurrentQuestion() {

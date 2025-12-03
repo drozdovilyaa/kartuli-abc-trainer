@@ -1,16 +1,16 @@
 /**
- * Logger — Система логирования для отладки
+ * Logger — Logging System for Debugging
  * ==========================================
- * Логирует все действия приложения в консоль
+ * Logs all application actions to console
  */
 
 'use strict';
 
 export class Logger {
-    /** Включить/выключить логирование */
+    /** Enable/disable logging */
     static ENABLED = true;
     
-    /** Уровни логирования */
+    /** Logging levels */
     static LEVELS = {
         INFO: 'INFO',
         ACTION: 'ACTION',
@@ -20,7 +20,7 @@ export class Logger {
         ERROR: 'ERROR'
     };
 
-    /** Цвета для разных уровней */
+    /** Colors for different levels */
     static COLORS = {
         INFO: '#2196F3',
         ACTION: '#4CAF50',
@@ -31,10 +31,10 @@ export class Logger {
     };
 
     /**
-     * Основной метод логирования
-     * @param {string} level - Уровень лога
-     * @param {string} message - Сообщение
-     * @param {Object} data - Дополнительные данные
+     * Main logging method
+     * @param {string} level - Log level
+     * @param {string} message - Message
+     * @param {Object} data - Additional data
      */
     static log(level, message, data = null) {
         if (!Logger.ENABLED) return;
@@ -59,45 +59,45 @@ export class Logger {
         }
     }
 
-    // ===== Удобные методы для разных типов логов =====
+    // ===== Convenience methods for different log types =====
 
-    /** Информационное сообщение */
+    /** Informational message */
     static info(message, data = null) {
         Logger.log(Logger.LEVELS.INFO, message, data);
     }
 
-    /** Действие пользователя */
+    /** User action */
     static action(message, data = null) {
         Logger.log(Logger.LEVELS.ACTION, message, data);
     }
 
-    /** Игровая логика */
+    /** Game logic */
     static game(message, data = null) {
         Logger.log(Logger.LEVELS.GAME, message, data);
     }
 
-    /** UI события */
+    /** UI events */
     static ui(message, data = null) {
         Logger.log(Logger.LEVELS.UI, message, data);
     }
 
-    /** Данные */
+    /** Data */
     static data(message, data = null) {
         Logger.log(Logger.LEVELS.DATA, message, data);
     }
 
-    /** Ошибка */
+    /** Error */
     static error(message, data = null) {
         Logger.log(Logger.LEVELS.ERROR, message, data);
     }
 
-    // ===== Специальные методы для игровых событий =====
+    // ===== Special methods for game events =====
 
     /**
-     * Лог показа вопроса
+     * Log question shown
      */
     static questionShown(item, template, questionData) {
-        Logger.game('📝 Показан вопрос', {
+        Logger.game('📝 Question shown', {
             item: {
                 id: item.id,
                 type: item.type,
@@ -111,55 +111,55 @@ export class Logger {
     }
 
     /**
-     * Лог ответа пользователя
+     * Log user answer
      */
     static answerGiven(userAnswer, correctAnswer, isCorrect) {
         const emoji = isCorrect ? '✅' : '❌';
-        const result = isCorrect ? 'ВЕРНО' : 'НЕВЕРНО';
+        const result = isCorrect ? 'CORRECT' : 'INCORRECT';
         Logger.action(`${emoji} ${result}: "${userAnswer}" ${isCorrect ? '=' : '≠'} "${correctAnswer}"`);
     }
 
     /**
-     * Лог обновления прогресса элемента
+     * Log item progress update
      */
     static progressUpdated(itemId, oldCount, newCount, isLearned) {
         const emoji = isLearned ? '🎓' : '📊';
-        const status = isLearned ? ' ВЫУЧЕН!' : '';
-        Logger.game(`${emoji} Прогресс: ${oldCount} → ${newCount}/3${status}`, { itemId });
+        const status = isLearned ? ' LEARNED!' : '';
+        Logger.game(`${emoji} Progress: ${oldCount} → ${newCount}/3${status}`, { itemId });
     }
 
     /**
-     * Лог выбора следующего элемента
+     * Log next item selection
      */
     static nextItemSelected(item, candidates, recentIds) {
-        // Показываем ID выбранного элемента и историю
-        Logger.game(`🎯 Выбран [${item.id}] "${item.geo}" | Кандидатов: ${candidates.length} | История: [${recentIds.join(', ')}]`);
+        // Show selected item ID and history
+        Logger.game(`🎯 Selected [${item.id}] "${item.geo}" | Candidates: ${candidates.length} | History: [${recentIds.join(', ')}]`);
     }
 
     /**
-     * Лог начала сессии
+     * Log session start
      */
     static sessionStarted(mode, itemsCount) {
-        Logger.info('🚀 Сессия начата', {
+        Logger.info('🚀 Session started', {
             mode,
             totalItems: itemsCount
         });
     }
 
     /**
-     * Лог завершения сессии
+     * Log session end
      */
     static sessionEnded(stats) {
-        Logger.info('🏁 Сессия завершена', stats);
+        Logger.info('🏁 Session ended', stats);
     }
 
     /**
-     * Лог смены экрана
+     * Log screen change
      */
     static screenChanged(screenName) {
-        Logger.ui(`📱 Экран: ${screenName}`);
+        Logger.ui(`📱 Screen: ${screenName}`);
     }
 }
 
-// Делаем Logger доступным глобально для отладки в консоли
+// Make Logger available globally for console debugging
 window.Logger = Logger;

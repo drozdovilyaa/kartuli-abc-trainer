@@ -1,7 +1,7 @@
 /**
- * Data Layer — Репозиторий данных
+ * Data Layer — Data Repository
  * =================================
- * Класс для доступа к данным приложения
+ * Class for accessing application data
  */
 
 'use strict';
@@ -9,14 +9,14 @@
 import { MOCK_DATA } from './data.js';
 
 /**
- * DataRepository — Паттерн репозитория для доступа к данным
- * Предоставляет методы для получения букв, слов, фраз и маппингов
+ * DataRepository — Repository pattern for data access
+ * Provides methods for getting letters, words, phrases and mappings
  */
 export class DataRepository {
     /**
-     * Получить данные по типу режима
-     * @param {string} mode - Режим: 'letters' или 'words'
-     * @returns {Array} - Массив элементов для изучения
+     * Get data by mode type
+     * @param {string} mode - Mode: 'letters' or 'words'
+     * @returns {Array} - Array of items for learning
      */
     static getData(mode) {
         if (mode === 'letters') {
@@ -31,15 +31,15 @@ export class DataRepository {
     }
 
     /**
-     * Получить все буквы для режима сборки
-     * @returns {Array} - Массив всех букв
+     * Get all letters for assembly mode
+     * @returns {Array} - Array of all letters
      */
     static getAllLetters() {
         return [...MOCK_DATA.letters];
     }
 
     /**
-     * Получить маппинг грузинских букв в русские
+     * Get Georgian to Russian letter mapping
      * @returns {Map} - Map<geo, rus>
      */
     static getGeoToRusMap() {
@@ -49,7 +49,7 @@ export class DataRepository {
     }
 
     /**
-     * Получить маппинг русских букв в грузинские
+     * Get Russian to Georgian letter mapping
      * @returns {Map} - Map<rus, geo>
      */
     static getRusToGeoMap() {
@@ -59,24 +59,24 @@ export class DataRepository {
     }
 
     /**
-     * Получить все слова
-     * @returns {Array} - Массив слов
+     * Get all words
+     * @returns {Array} - Array of words
      */
     static getWords() {
         return [...MOCK_DATA.words];
     }
 
     /**
-     * Получить все фразы
-     * @returns {Array} - Массив фраз
+     * Get all phrases
+     * @returns {Array} - Array of phrases
      */
     static getPhrases() {
         return [...MOCK_DATA.phrases];
     }
 
     /**
-     * Получить слова (для режима букв - word_assembly, translit_input)
-     * @returns {Array} - Массив слов с транслитерацией
+     * Get words (for letters mode - word_assembly, translit_input)
+     * @returns {Array} - Array of words with transliteration
      */
     static getSimpleWords() {
         return [...MOCK_DATA.words];

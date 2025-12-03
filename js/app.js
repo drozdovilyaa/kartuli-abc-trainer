@@ -1,7 +1,7 @@
 /**
- * App Layer — Главный класс приложения
+ * App Layer — Main Application Class
  * =====================================
- * Точка входа и координация всех компонентов
+ * Entry point and coordination of all components
  */
 
 'use strict';
@@ -14,8 +14,8 @@ import { UIManager } from './ui.js';
 import { Logger } from './logger.js';
 
 /**
- * App — Главный класс приложения
- * Координирует работу всех слоёв
+ * App — Main Application Class
+ * Coordinates all layers
  */
 export class App {
     constructor() {
@@ -23,34 +23,34 @@ export class App {
         this.ui = new UIManager();
         /** @type {GameSession|null} */
         this.session = null;
-        /** Таймер для перехода к следующему вопросу */
+        /** Timer for transitioning to next question */
         this.nextQuestionTimeout = null;
-        /** Задержка перед следующим вопросом (мс) */
+        /** Delay before next question (ms) */
         this.DELAY_NEXT_QUESTION = 1200;
 
         this._bindEvents();
     }
 
     /**
-     * Привязать обработчики событий
+     * Bind event handlers
      * @private
      */
     _bindEvents() {
-        // Делегирование событий через data-action
+        // Event delegation via data-action
         document.addEventListener('click', (e) => {
-            // Ищем элемент с data-action (может быть сам target или родитель)
+            // Find element with data-action (could be target itself or parent)
             const actionElement = e.target.closest('[data-action]');
             if (actionElement) {
                 this._handleAction(actionElement.dataset.action, actionElement);
             }
 
-            // Обработка option-btn (choice)
+            // Handle option-btn (choice)
             const optionBtn = e.target.closest('.option-btn');
             if (optionBtn && !optionBtn.disabled) {
                 this._handleChoiceAnswer(optionBtn.dataset.answer);
             }
 
-            // Обработка letter-btn (assembly)
+            // Handle letter-btn (assembly)
             const letterBtn = e.target.closest('.letter-btn');
             if (letterBtn && !letterBtn.disabled) {
                 const question = this.session?.getCurrentQuestion();
@@ -58,7 +58,7 @@ export class App {
                 this.ui.addToAssembly(letterBtn.dataset.letter, letterBtn, requiredLength);
             }
 
-            // Обработка word-btn (phrase assembly)
+            // Handle word-btn (phrase assembly)
             const wordBtn = e.target.closest('.word-btn');
             if (wordBtn && !wordBtn.disabled) {
                 const question = this.session?.getCurrentQuestion();
@@ -66,17 +66,17 @@ export class App {
                 this.ui.addToAssembly(wordBtn.dataset.word, wordBtn, requiredLength);
             }
 
-            // Кнопка проверки (desktop + mobile)
+            // Submit button (desktop + mobile)
             if (e.target.closest('#submit-btn') || e.target.closest('#submit-btn-mobile')) {
                 this._handleSubmit();
             }
 
-            // Кнопка очистки сборки (desktop + mobile)
+            // Clear assembly button (desktop + mobile)
             if (e.target.closest('#clear-assembly-btn') || e.target.closest('#clear-assembly-btn-mobile')) {
                 this.ui.clearAssembly();
             }
 
-            // Кнопка показа подсказки (модалка)
+            // Hint button (modal)
             const hintBtn = e.target.closest('#hint-btn');
             if (hintBtn) {
                 const hintText = hintBtn.dataset.hint;
@@ -84,14 +84,14 @@ export class App {
             }
         });
 
-        // Обработка Enter в input
+        // Handle Enter in input
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && e.target.id === 'answer-input') {
                 this._handleSubmit();
             }
         });
 
-        // Обработка ввода в input — включение/выключение кнопки "Проверить"
+        // Handle input change — enable/disable "Check" button
         document.addEventListener('input', (e) => {
             if (e.target.id === 'answer-input') {
                 const hasValue = e.target.value.trim().length > 0;
@@ -99,12 +99,12 @@ export class App {
             }
         });
 
-        // Отслеживание виртуальной клавиатуры на мобильных
+        // Track virtual keyboard on mobile
         this._setupKeyboardTracking();
     }
 
     /**
-     * Настройка отслеживания клавиатуры через visualViewport API
+     * Setup keyboard tracking via visualViewport API
      * @private
      */
     _setupKeyboardTracking() {
@@ -114,11 +114,11 @@ export class App {
             const keyboardHeight = window.innerHeight - window.visualViewport.height;
             
             if (keyboardHeight > 100) {
-                // Клавиатура открыта
+                // Keyboard is open
                 document.body.classList.add('keyboard-open');
                 document.documentElement.style.setProperty('--keyboard-height', `${keyboardHeight}px`);
             } else {
-                // Клавиатура закрыта
+                // Keyboard is closed
                 document.body.classList.remove('keyboard-open');
                 document.documentElement.style.setProperty('--keyboard-height', '0px');
             }
@@ -129,7 +129,7 @@ export class App {
     }
 
     /**
-     * Показать модальное окно с подсказкой
+     * Show hint modal dialog
      * @private
      */
     _showHintModal(hintText) {
@@ -142,13 +142,13 @@ export class App {
     }
 
     /**
-     * Обработать действие
-     * @param {string} action - Название действия
-     * @param {HTMLElement} target - Целевой элемент
+     * Handle action
+     * @param {string} action - Action name
+     * @param {HTMLElement} target - Target element
      * @private
      */
     _handleAction(action, target) {
-        Logger.action(`Действие: ${action}`);
+        Logger.action(`Action: ${action}`);
         
         switch (action) {
             case 'start-letters':
@@ -167,8 +167,8 @@ export class App {
     }
 
     /**
-     * Начать игру
-     * @param {string} mode - Режим игры
+     * Start game
+     * @param {string} mode - Game mode
      * @private
      */
     _startGame(mode) {
@@ -180,7 +180,7 @@ export class App {
     }
 
     /**
-     * Вернуться на главный экран
+     * Return to home screen
      * @private
      */
     _goHome() {
@@ -194,20 +194,20 @@ export class App {
     }
 
     /**
-     * Показать следующий вопрос
+     * Show next question
      * @private
      */
     _nextQuestion() {
         if (!this.session) return;
 
-        Logger.game('⏭️ Переход к следующему вопросу');
+        Logger.game('⏭️ Moving to next question');
 
-        // Обновляем прогресс
+        // Update progress
         const stats = this.session.getStats();
         this.ui.updateProgress(stats);
-        Logger.data('Статистика', stats);
+        Logger.data('Statistics', stats);
 
-        // Проверяем завершение
+        // Check for completion
         if (this.session.isComplete()) {
             Logger.sessionEnded(stats);
             this.ui.showResults(stats);
@@ -215,10 +215,10 @@ export class App {
             return;
         }
 
-        // Сбрасываем состояние сборки
+        // Reset assembly state
         this.ui.resetAssemblyState();
 
-        // Получаем следующий элемент
+        // Get next item
         const item = this.session.getNextItem();
         if (!item) {
             Logger.sessionEnded(stats);
@@ -227,85 +227,85 @@ export class App {
             return;
         }
 
-        // Выбираем шаблон вопроса
+        // Select question template
         const template = this._selectTemplate(item);
-        Logger.game(`📋 Выбран шаблон: ${template}`, { itemType: item.type });
+        Logger.game(`📋 Selected template: ${template}`, { itemType: item.type });
         
-        // Для шаблонов word_assembly и translit_input берём случайное слово
+        // For word_assembly and translit_input templates, pick a random word
         let renderItem = item;
         if (item.type === 'letter' && (template === 'word_assembly' || template === 'translit_input')) {
             const simpleWords = DataRepository.getSimpleWords();
             renderItem = simpleWords[Utils.getRandomInt(0, simpleWords.length)];
-            Logger.data('Использовано простое слово для шаблона', { word: renderItem });
+            Logger.data('Using simple word for template', { word: renderItem });
         }
         
         const renderer = QuestionRendererFactory.getRenderer(template);
 
         if (renderer) {
             const questionData = renderer(renderItem, this.session.allItems, this.ui.questionContent, this.ui.answerArea);
-            // Сохраняем оригинальный itemId для учёта прогресса буквы
+            // Save original itemId for tracking letter progress
             questionData.itemId = item.id;
             this.session.setCurrentQuestion(questionData);
             
             Logger.questionShown(item, template, questionData);
             
-            // Устанавливаем кнопки в action bar для мобильных
+            // Set action bar buttons for mobile
             if (questionData.type === 'assembly' || questionData.type === 'phrase_assembly') {
                 this.ui.setActionButtons('assembly');
-                this.ui.updateSubmitButton(false); // Изначально выключена
+                this.ui.updateSubmitButton(false); // Initially disabled
             } else if (questionData.type === 'input') {
                 this.ui.setActionButtons('submit');
-                this.ui.updateSubmitButton(false); // Изначально выключена
+                this.ui.updateSubmitButton(false); // Initially disabled
             } else {
-                this.ui.setActionButtons(''); // choice — без кнопок
+                this.ui.setActionButtons(''); // choice — no buttons
             }
         }
     }
 
     /**
-     * Выбрать шаблон вопроса в зависимости от типа элемента
-     * @param {Object} item - Элемент для вопроса
-     * @returns {string} - Название шаблона
+     * Select question template based on item type
+     * @param {Object} item - Item for the question
+     * @returns {string} - Template name
      * @private
      */
     _selectTemplate(item) {
         if (item.type === 'letter') {
-            // Для букв — все 6 шаблонов по ТЗ
+            // For letters — all 6 templates per spec
             const templates = [
-                'choice_geo_rus',      // Грузинская → выбор русской
-                'choice_rus_geo',      // Русская → выбор грузинской
-                'input_geo_rus',       // Грузинская → ввод русской
-                'input_rus_geo',       // Русская → ввод грузинской
-                'word_assembly',       // Слово → сборка из грузинских букв
-                'translit_input'       // Транслит → ввод грузинскими
+                'choice_geo_rus',      // Georgian → choose Russian
+                'choice_rus_geo',      // Russian → choose Georgian
+                'input_geo_rus',       // Georgian → input Russian
+                'input_rus_geo',       // Russian → input Georgian
+                'word_assembly',       // Word → assemble from Georgian letters
+                'translit_input'       // Translit → input in Georgian
             ];
             return templates[Utils.getRandomInt(0, templates.length)];
         } else if (item.type === 'word') {
-            // Для слов — выбор или ввод перевода в обе стороны
+            // For words — choice or input translation both ways
             const templates = [
-                'choice_geo_rus',      // Грузинское слово → выбор русского перевода
-                'choice_rus_geo',      // Русское слово → выбор грузинского перевода
-                'translate_input',     // Грузинское слово → ввод русского перевода
-                'input_rus_geo'        // Русское слово → ввод грузинского перевода
+                'choice_geo_rus',      // Georgian word → choose Russian translation
+                'choice_rus_geo',      // Russian word → choose Georgian translation
+                'translate_input',     // Georgian word → input Russian translation
+                'input_rus_geo'        // Russian word → input Georgian translation
             ];
             return templates[Utils.getRandomInt(0, templates.length)];
         } else if (item.type === 'phrase') {
-            // Для фраз — сборка из слов
+            // For phrases — word assembly
             return 'phrase_assembly';
         }
         return 'choice_geo_rus';
     }
 
     /**
-     * Обработать ответ choice
-     * @param {string} answer - Выбранный ответ
+     * Handle choice answer
+     * @param {string} answer - Selected answer
      * @private
      */
     _handleChoiceAnswer(answer) {
         const question = this.session?.getCurrentQuestion();
         if (!question) return;
 
-        Logger.action('Выбран вариант ответа', { answer });
+        Logger.action('Answer option selected', { answer });
 
         const isCorrect = answer === question.correctAnswer;
         this.session.processAnswer(question.itemId, isCorrect);
@@ -318,14 +318,14 @@ export class App {
     }
 
     /**
-     * Обработать submit (input или assembly)
+     * Handle submit (input or assembly)
      * @private
      */
     _handleSubmit() {
         const question = this.session?.getCurrentQuestion();
         if (!question) return;
 
-        Logger.action('Нажата кнопка "Проверить"', { questionType: question.type });
+        Logger.action('"Check" button pressed', { questionType: question.type });
 
         let userAnswer = '';
         
@@ -341,7 +341,7 @@ export class App {
         }
 
         const correctNormalized = question.correctAnswer.toLowerCase().trim();
-        // Для фраз убираем пунктуацию при сравнении
+        // For phrases, remove punctuation when comparing
         const isCorrect = question.type === 'phrase_assembly'
             ? userAnswer.replace(/[?.!,]/g, '') === correctNormalized.replace(/[?.!,]/g, '')
             : userAnswer === correctNormalized;
@@ -360,24 +360,24 @@ export class App {
     }
 
     /**
-     * Авто-переход при успехе, кнопка "Далее" при ошибке
+     * Auto-transition on success, show "Next" button on error
      * @param {boolean} isCorrect
      * @private
      */
     _scheduleNextOrShowButton(isCorrect) {
         if (isCorrect) {
-            // При успехе — авто-переход через 1 сек
-            Logger.game('⏱️ Авто-переход через 1.2 сек');
+            // On success — auto-transition after 1 sec
+            Logger.game('⏱️ Auto-transition in 1.2 sec');
             this._scheduleNextQuestion();
         } else {
-            // При ошибке — показать кнопку "Далее" в action bar
-            Logger.game('🔘 Показана кнопка "Далее"');
+            // On error — show "Next" button in action bar
+            Logger.game('🔘 "Next" button shown');
             this.ui.setActionButtons('next');
         }
     }
 
     /**
-     * Запланировать переход к следующему вопросу
+     * Schedule transition to next question
      * @private
      */
     _scheduleNextQuestion() {

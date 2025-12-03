@@ -1,17 +1,17 @@
 /**
- * Data Layer — Данные приложения
+ * Data Layer — Application Data
  * ================================
- * Содержит тестовые данные для обучения грузинскому языку
+ * Contains test data for Georgian language learning
  */
 
 'use strict';
 
 /**
- * Константа с тестовыми данными
- * Содержит буквы, слова и фразы для изучения
+ * Constant with test data
+ * Contains letters, words and phrases for learning
  */
 export const MOCK_DATA = {
-    // Грузинские буквы с русскими аналогами
+    // Georgian letters with Russian equivalents
     letters: [
         { id: "l1", geo: "ა", rus: "а", type: "letter" },
         { id: "l2", geo: "ბ", rus: "б", type: "letter" },
@@ -48,9 +48,9 @@ export const MOCK_DATA = {
         { id: "l33", geo: "ჰ", rus: "хх", type: "letter", comment: "Лёгкое, на выдохе" }
     ],
 
-    // Слова для изучения
+    // Words for learning
     words: [
-        // Базовые слова (семья)
+        // Basic words (family)
         { id: "w1", geo: "მამა", rus: "отец", translit: "мама", type: "word" },
         { id: "w2", geo: "დედა", rus: "мать", translit: "дэда", type: "word" },
         { id: "w3", geo: "სახლი", rus: "дом", translit: "сахли", type: "word" },
@@ -81,7 +81,7 @@ export const MOCK_DATA = {
         { id: "w28", geo: "პატარა", rus: "маленький", translit: "патара", type: "word" },
         { id: "w29", geo: "ახალი", rus: "новый", translit: "ахали", type: "word" },
         { id: "w30", geo: "ლამაზი", rus: "красивый", translit: "ламази", type: "word" },
-        // Вопросительные слова
+        // Question words
         { id: "w31", geo: "ვინ", rus: "кто", translit: "вин", type: "word" },
         { id: "w32", geo: "რა", rus: "что", translit: "ра", type: "word" },
         { id: "w33", geo: "სად", rus: "где / куда", translit: "сад", type: "word" },
@@ -89,7 +89,7 @@ export const MOCK_DATA = {
         { id: "w35", geo: "რატომ", rus: "почему", translit: "ратом", type: "word" },
         { id: "w36", geo: "როგორ", rus: "как", translit: "рогор", type: "word" },
         { id: "w37", geo: "რამდენი", rus: "сколько", translit: "рамдэни", type: "word" },
-        // Места и транспорт
+        // Places and transport
         { id: "w38", geo: "ბაზარი", rus: "рынок", translit: "базари", type: "word" },
         { id: "w39", geo: "ტაქსი", rus: "такси", translit: "такси", type: "word" },
         { id: "w40", geo: "პარკი", rus: "парк", translit: "парки", type: "word" },
@@ -99,7 +99,7 @@ export const MOCK_DATA = {
         { id: "w44", geo: "სკოლა", rus: "школа", translit: "скола", type: "word" },
         { id: "w45", geo: "ავტობუსი", rus: "автобус", translit: "автобуси", type: "word" },
         { id: "w46", geo: "გოგო", rus: "девушка", translit: "гого", type: "word" },
-        // Семья (расширенная)
+        // Family (extended)
         { id: "w47", geo: "შვილი", rus: "ребёнок / сын", translit: "швили", type: "word" },
         { id: "w48", geo: "ბებია", rus: "бабушка", translit: "бэбиа", type: "word" },
         { id: "w49", geo: "ბაბუა", rus: "дедушка", translit: "бабуа", type: "word" },
@@ -108,7 +108,7 @@ export const MOCK_DATA = {
         { id: "w52", geo: "მშობლები", rus: "родители", translit: "мшоблэби", type: "word" },
         { id: "w53", geo: "ქმარი", rus: "муж", translit: "кмари", type: "word" },
         { id: "w54", geo: "ცოლი", rus: "жена", translit: "цоли", type: "word" },
-        // Природа и места
+        // Nature and places
         { id: "w55", geo: "ტყე", rus: "лес", translit: "тке", type: "word" },
         { id: "w56", geo: "რესტორანი", rus: "ресторан", translit: "рэсторани", type: "word" },
         { id: "w57", geo: "ქუჩა", rus: "улица", translit: "куча", type: "word" },
@@ -117,13 +117,13 @@ export const MOCK_DATA = {
         { id: "w60", geo: "მდინარე", rus: "река", translit: "мдинарэ", type: "word" },
         { id: "w61", geo: "ცა", rus: "небо", translit: "ца", type: "word" },
         { id: "w62", geo: "მთვარე", rus: "луна", translit: "мтварэ", type: "word" },
-        // Люди и профессии
+        // People and professions
         { id: "w63", geo: "ბიჭი", rus: "мальчик", translit: "бичи", type: "word" },
         { id: "w64", geo: "ადამიანი", rus: "человек", translit: "адамиани", type: "word" },
         { id: "w65", geo: "თანამშრომელი", rus: "сотрудник", translit: "танамшромэли", type: "word" },
         { id: "w66", geo: "ექიმი", rus: "врач", translit: "экими", type: "word" },
         { id: "w67", geo: "მოსწავლე", rus: "ученик", translit: "мосцавлэ", type: "word" },
-        // Мебель и дом
+        // Furniture and home
         { id: "w68", geo: "სკამი", rus: "стул", translit: "сками", type: "word" },
         { id: "w69", geo: "მაგიდა", rus: "стол", translit: "магида", type: "word" },
         { id: "w70", geo: "კარი", rus: "дверь", translit: "кари", type: "word" },
@@ -132,7 +132,7 @@ export const MOCK_DATA = {
         { id: "w73", geo: "კარადა", rus: "шкаф", translit: "карада", type: "word" },
         { id: "w74", geo: "სამზარეულო", rus: "кухня", translit: "самзарэуло", type: "word" },
         { id: "w75", geo: "ოთახები", rus: "комнаты", translit: "отахэби", type: "word" },
-        // Числа
+        // Numbers
         { id: "w76", geo: "ერთი", rus: "один", translit: "эрти", type: "word" },
         { id: "w77", geo: "ორი", rus: "два", translit: "ори", type: "word" },
         { id: "w78", geo: "სამი", rus: "три", translit: "сами", type: "word" },
@@ -143,7 +143,7 @@ export const MOCK_DATA = {
         { id: "w83", geo: "რვა", rus: "восемь", translit: "рва", type: "word" },
         { id: "w84", geo: "ცხრა", rus: "девять", translit: "цхра", type: "word" },
         { id: "w85", geo: "ათი", rus: "десять", translit: "ати", type: "word" },
-        // Дни недели
+        // Days of week
         { id: "w86", geo: "ორშაბათი", rus: "понедельник", translit: "оршабати", type: "word" },
         { id: "w87", geo: "სამშაბათი", rus: "вторник", translit: "самшабати", type: "word" },
         { id: "w88", geo: "ოთხშაბათი", rus: "среда", translit: "отхшабати", type: "word" },
@@ -151,7 +151,7 @@ export const MOCK_DATA = {
         { id: "w90", geo: "პარასკევი", rus: "пятница", translit: "параскэви", type: "word" },
         { id: "w91", geo: "შაბათი", rus: "суббота", translit: "шабати", type: "word" },
         { id: "w92", geo: "კვირა", rus: "воскресенье / неделя", translit: "квира", type: "word" },
-        // Прилагательные
+        // Adjectives
         { id: "w93", geo: "ჭკვიანი", rus: "умный", translit: "чквиани", type: "word" },
         { id: "w94", geo: "უფროსი", rus: "старший", translit: "упроси", type: "word" },
         { id: "w95", geo: "უმცროსი", rus: "младший", translit: "умцроси", type: "word" },
@@ -164,7 +164,7 @@ export const MOCK_DATA = {
         { id: "w102", geo: "სწრაფი", rus: "быстрый", translit: "сцрапи", type: "word" },
         { id: "w103", geo: "ახალგაზრდა", rus: "молодой", translit: "ахалгазрда", type: "word" },
         { id: "w104", geo: "ხანდაზმული", rus: "пожилой", translit: "хандазмули", type: "word" },
-        // Существительные (разное)
+        // Nouns (miscellaneous)
         { id: "w105", geo: "ჩანთა", rus: "сумка", translit: "чанта", type: "word" },
         { id: "w106", geo: "ველოსიპედი", rus: "велосипед", translit: "вэлосипэди", type: "word" },
         { id: "w107", geo: "სახელი", rus: "имя", translit: "сахэли", type: "word" },
@@ -206,10 +206,10 @@ export const MOCK_DATA = {
         { id: "w143", geo: "საღამო", rus: "вечер", translit: "сагамо", type: "word" },
         { id: "w144", geo: "დიზაინი", rus: "дизайн", translit: "дизаини", type: "word" },
         { id: "w145", geo: "კუ", rus: "черепаха", translit: "ку", type: "word" },
-        // Страны и география
+        // Countries and geography
         { id: "w146", geo: "ქვეყანა", rus: "страна", translit: "квэкана", type: "word" },
         { id: "w147", geo: "საქართველო", rus: "Грузия", translit: "сакартвэло", type: "word" },
-        // Напитки и еда
+        // Drinks and food
         { id: "w148", geo: "ყავა", rus: "кофе", translit: "кава", type: "word" },
         { id: "w149", geo: "ლუდი", rus: "пиво", translit: "луди", type: "word" },
         { id: "w150", geo: "რძე", rus: "молоко", translit: "рдзэ", type: "word" },
@@ -224,7 +224,7 @@ export const MOCK_DATA = {
         { id: "w160", geo: "პილპილი", rus: "чёрный перец", translit: "пилпили", type: "word" },
         { id: "w161", geo: "მაიონეზი", rus: "майонез", translit: "маионэзи", type: "word" },
         { id: "w162", geo: "შაურმა", rus: "шаурма", translit: "шаурма", type: "word" },
-        // Продукты и быт (дополнительно)
+        // Products and household (additional)
         { id: "w201", geo: "ხორცი", rus: "мясо", translit: "хорци", type: "word" },
         { id: "w202", geo: "თევზი", rus: "рыба", translit: "тэвзи", type: "word" },
         { id: "w203", geo: "კვერცხი", rus: "яйцо", translit: "квэрцхи", type: "word" },
@@ -250,7 +250,7 @@ export const MOCK_DATA = {
         { id: "w223", geo: "ნაყინი", rus: "мороженое", translit: "накини", type: "word" },
         { id: "w224", geo: "ტორტი", rus: "торт", translit: "торти", type: "word" },
         { id: "w225", geo: "ნამცხვარი", rus: "пирожное", translit: "намцхвари", type: "word" },
-        // Быт и предметы
+        // Household and items
         { id: "w226", geo: "თეფში", rus: "тарелка", translit: "тэпши", type: "word" },
         { id: "w227", geo: "ჭიქა", rus: "стакан", translit: "чика", type: "word" },
         { id: "w228", geo: "ფინჯანი", rus: "чашка", translit: "пинджани", type: "word" },
@@ -268,16 +268,16 @@ export const MOCK_DATA = {
         { id: "w240", geo: "ბალიში", rus: "подушка", translit: "балиши", type: "word" },
         { id: "w241", geo: "საბანი", rus: "одеяло", translit: "сабани", type: "word" },
         { id: "w242", geo: "ნათურა", rus: "лампочка", translit: "натура", type: "word" },
-        // Глаголы и действия
+        // Verbs and actions
         { id: "w163", geo: "მინდა", rus: "я хочу", translit: "минда", type: "word" },
         { id: "w166", geo: "დალიო", rus: "выпить", translit: "далио", type: "word" },
         { id: "w169", geo: "მიირთვით", rus: "угощайтесь", translit: "миртвит", type: "word" },
-        // Местоимения и частицы
+        // Pronouns and particles
         { id: "w170", geo: "მე", rus: "я", translit: "мэ", type: "word" },
         { id: "w171", geo: "ეს", rus: "это", translit: "эс", type: "word" },
         { id: "w172", geo: "თქვენი", rus: "ваш", translit: "тквэни", type: "word" },
         { id: "w173", geo: "მეც", rus: "я тоже", translit: "мэц", type: "word" },
-        // Наречия и союзы
+        // Adverbs and conjunctions
         { id: "w174", geo: "თუ", rus: "если, или", translit: "ту", type: "word" },
         { id: "w175", geo: "მაგრამ", rus: "но", translit: "маграм", type: "word" },
         { id: "w176", geo: "ცოტა", rus: "немного", translit: "цота", type: "word" },
@@ -286,7 +286,7 @@ export const MOCK_DATA = {
         { id: "w179", geo: "ყოველთვის", rus: "всегда", translit: "ковэлтвис", type: "word" },
         { id: "w180", geo: "მართლა", rus: "правда", translit: "мартла", type: "word" },
         { id: "w181", geo: "რით", rus: "чем/с чем", translit: "рит", type: "word" },
-        // Фразы и выражения
+        // Phrases and expressions
         { id: "w182", geo: "შეიძლება", rus: "можно, возможно", translit: "шэидзлэба", type: "word" },
         { id: "w183", geo: "უკაცრავად", rus: "извините", translit: "укацравад", type: "word" },
         { id: "w184", geo: "საშუალო", rus: "средний", translit: "сашуало", type: "word" },
@@ -305,7 +305,7 @@ export const MOCK_DATA = {
         { id: "w200", geo: "ყველანაირი", rus: "всякий, любой", translit: "квэланаири", type: "word" }
     ],
 
-    // Фразы для изучения
+    // Phrases for learning
     phrases: [
         {
             id: "p1",

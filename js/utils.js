@@ -1,19 +1,19 @@
 /**
- * Utils Layer — Утилитарные функции
+ * Utils Layer — Utility Functions
  * ==================================
- * Вспомогательные статические методы
+ * Helper static methods
  */
 
 'use strict';
 
 /**
- * Utils — Утилитарный класс со статическими методами
+ * Utils — Utility class with static methods
  */
 export class Utils {
     /**
-     * Перемешать массив (Fisher-Yates shuffle)
-     * @param {Array} arr - Исходный массив
-     * @returns {Array} - Новый перемешанный массив
+     * Shuffle array (Fisher-Yates shuffle)
+     * @param {Array} arr - Source array
+     * @returns {Array} - New shuffled array
      */
     static shuffleArray(arr) {
         const result = [...arr];
@@ -25,9 +25,9 @@ export class Utils {
     }
 
     /**
-     * Получить случайное число в диапазоне
-     * @param {number} min - Минимум (включительно)
-     * @param {number} max - Максимум (не включительно)
+     * Get random number in range
+     * @param {number} min - Minimum (inclusive)
+     * @param {number} max - Maximum (exclusive)
      * @returns {number}
      */
     static getRandomInt(min, max) {
@@ -35,9 +35,9 @@ export class Utils {
     }
 
     /**
-     * Получить N случайных элементов из массива
-     * @param {Array} arr - Исходный массив
-     * @param {number} n - Количество элементов
+     * Get N random elements from array
+     * @param {Array} arr - Source array
+     * @param {number} n - Number of elements
      * @returns {Array}
      */
     static getRandomElements(arr, n) {
@@ -46,7 +46,7 @@ export class Utils {
     }
 
     /**
-     * Генерировать уникальный ID
+     * Generate unique ID
      * @returns {string}
      */
     static generateId() {
@@ -54,8 +54,8 @@ export class Utils {
     }
 
     /**
-     * Нормализация строки для сравнения
-     * @param {string} str - Строка
+     * Normalize string for comparison
+     * @param {string} str - String
      * @returns {string}
      */
     static normalizeString(str) {

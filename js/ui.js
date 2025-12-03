@@ -1,46 +1,46 @@
 /**
- * Presentation Layer — Управление UI
+ * Presentation Layer — UI Management
  * ===================================
- * Класс для управления отображением и состоянием интерфейса (Bootstrap 5.3)
+ * Class for managing display and interface state (Bootstrap 5.3)
  */
 
 'use strict';
 
 /**
- * UIManager — Управление интерфейсом приложения
- * Отвечает за переключение экранов, визуальную обратную связь, сборку
+ * UIManager — Application Interface Management
+ * Responsible for screen switching, visual feedback, assembly
  */
 export class UIManager {
     constructor() {
-        /** DOM-элементы экранов */
+        /** Screen DOM elements */
         this.screens = {
             home: document.getElementById('home-screen'),
             game: document.getElementById('game-screen'),
             result: document.getElementById('result-screen')
         };
 
-        /** DOM-элемент контейнера вопроса (центр) */
+        /** Question container DOM element (center) */
         this.questionContent = document.getElementById('question-content');
 
-        /** DOM-элемент контейнера ответов (низ) */
+        /** Answer area DOM element (bottom) */
         this.answerArea = document.getElementById('answer-area');
 
-        /** DOM-элемент блока прогресса */
+        /** Progress block DOM element */
         this.progressInfo = document.getElementById('progress-info');
 
-        /** DOM-элемент панели действий (мобильная) */
+        /** Action bar DOM element (mobile) */
         this.actionBar = document.getElementById('action-buttons');
 
-        /** Текущий экран */
+        /** Current screen */
         this.currentScreen = 'home';
 
-        /** Состояние сборки (assembly) */
+        /** Assembly state */
         this.assemblyState = [];
     }
 
     /**
-     * Переключить экран
-     * @param {string} screenName - Имя экрана: 'home', 'game', 'result'
+     * Switch screen
+     * @param {string} screenName - Screen name: 'home', 'game', 'result'
      */
     showScreen(screenName) {
         Object.values(this.screens).forEach(screen => {
@@ -50,15 +50,15 @@ export class UIManager {
             this.screens[screenName].classList.add('active');
             this.currentScreen = screenName;
         }
-        // Очищаем action bar при смене экрана
+        // Clear action bar on screen change
         if (this.actionBar) {
             this.actionBar.innerHTML = '';
         }
     }
 
     /**
-     * Установить кнопки в action bar
-     * @param {string} type - Тип кнопок: 'submit', 'assembly', 'next', 'hidden'
+     * Set action bar buttons
+     * @param {string} type - Button type: 'submit', 'assembly', 'next', 'hidden'
      */
     setActionButtons(type) {
         if (!this.actionBar) return;
@@ -99,8 +99,8 @@ export class UIManager {
     }
 
     /**
-     * Обновить состояние кнопки "Проверить" (disabled/enabled)
-     * @param {boolean} enabled - Активна ли кнопка
+     * Update "Check" button state (disabled/enabled)
+     * @param {boolean} enabled - Whether button is active
      */
     updateSubmitButton(enabled) {
         const submitBtn = document.getElementById('submit-btn');
@@ -115,8 +115,8 @@ export class UIManager {
     }
 
     /**
-     * Обновить прогресс
-     * @param {Object} stats - Статистика сессии
+     * Update progress
+     * @param {Object} stats - Session statistics
      */
     updateProgress(stats) {
         if (this.progressInfo) {
@@ -125,8 +125,8 @@ export class UIManager {
     }
 
     /**
-     * Показать результаты (Bootstrap)
-     * @param {Object} stats - Статистика сессии
+     * Show results (Bootstrap)
+     * @param {Object} stats - Session statistics
      */
     showResults(stats) {
         const resultContent = document.getElementById('result-content');
@@ -164,10 +164,10 @@ export class UIManager {
     }
 
     /**
-     * Подсветить правильный/неправильный вариант (choice) - Bootstrap
-     * @param {string} answer - Выбранный ответ
-     * @param {string} correctAnswer - Правильный ответ
-     * @param {boolean} isCorrect - Правильно ли
+     * Highlight correct/incorrect option (choice) - Bootstrap
+     * @param {string} answer - Selected answer
+     * @param {string} correctAnswer - Correct answer
+     * @param {boolean} isCorrect - Whether correct
      */
     highlightChoice(answer, correctAnswer, isCorrect) {
         const buttons = this.answerArea.querySelectorAll('.option-btn');
@@ -185,7 +185,7 @@ export class UIManager {
     }
 
     /**
-     * Подсветить input - Bootstrap
+     * Highlight input - Bootstrap
      * @param {boolean} isCorrect
      * @param {string} correctAnswer
      */
@@ -212,7 +212,7 @@ export class UIManager {
     }
 
     /**
-     * Подсветить assembly - Bootstrap
+     * Highlight assembly - Bootstrap
      * @param {boolean} isCorrect
      * @param {string} correctAnswer
      */
@@ -233,7 +233,7 @@ export class UIManager {
             }
         }
         
-        // Скрываем управление и пул при ответе
+        // Hide controls and pool on answer
         if (controls) {
             controls.classList.add('d-none');
         }
@@ -243,27 +243,27 @@ export class UIManager {
     }
 
     /**
-     * Добавить элемент в зону сборки - Bootstrap
-     * @param {string} value - Буква или слово
-     * @param {HTMLElement} sourceBtn - Исходная кнопка
-     * @param {number|null} requiredLength - Требуемая длина (опционально)
+     * Add element to assembly zone - Bootstrap
+     * @param {string} value - Letter or word
+     * @param {HTMLElement} sourceBtn - Source button
+     * @param {number|null} requiredLength - Required length (optional)
      */
     addToAssembly(value, sourceBtn, requiredLength = null) {
-        // Проверяем лимит, если указана требуемая длина
+        // Check limit if required length is specified
         if (requiredLength !== null && this.assemblyState.length >= requiredLength) {
-            return; // Не добавляем, если достигнут лимит
+            return; // Don't add if limit reached
         }
         
         const zone = document.getElementById('assembly-zone');
         if (!zone) return;
 
-        // Убираем placeholder
+        // Remove placeholder
         const placeholder = zone.querySelector('.assembly-placeholder');
         if (placeholder) {
             placeholder.classList.add('d-none');
         }
 
-        // Добавляем элемент
+        // Add element
         this.assemblyState.push(value);
 
         const span = document.createElement('span');
@@ -272,7 +272,7 @@ export class UIManager {
         span.dataset.index = this.assemblyState.length - 1;
         span.style.cursor = 'pointer';
         
-        // Клик для удаления
+        // Click to remove
         span.addEventListener('click', () => {
             this.removeFromAssembly(span, sourceBtn);
         });
@@ -280,37 +280,37 @@ export class UIManager {
         zone.appendChild(span);
         sourceBtn.disabled = true;
         
-        // Включаем кнопку "Проверить", если есть элементы
+        // Enable "Check" button if there are elements
         this.updateSubmitButton(this.assemblyState.length > 0);
     }
 
     /**
-     * Удалить элемент из сборки
-     * @param {HTMLElement} span - Элемент в зоне сборки
-     * @param {HTMLElement} sourceBtn - Исходная кнопка
+     * Remove element from assembly
+     * @param {HTMLElement} span - Element in assembly zone
+     * @param {HTMLElement} sourceBtn - Source button
      */
     removeFromAssembly(span, sourceBtn) {
         const zone = document.getElementById('assembly-zone');
         const index = parseInt(span.dataset.index);
         
-        // Удаляем из состояния
+        // Remove from state
         this.assemblyState.splice(index, 1);
         
-        // Удаляем из DOM
+        // Remove from DOM
         span.remove();
         
-        // Возвращаем кнопку
+        // Restore button
         if (sourceBtn) {
             sourceBtn.disabled = false;
         }
 
-        // Обновляем индексы
+        // Update indices
         const items = zone.querySelectorAll('.assembled-item');
         items.forEach((item, i) => {
             item.dataset.index = i;
         });
 
-        // Показываем placeholder если пусто
+        // Show placeholder if empty
         if (this.assemblyState.length === 0) {
             const placeholder = zone.querySelector('.assembly-placeholder');
             if (placeholder) {
@@ -318,12 +318,12 @@ export class UIManager {
             }
         }
         
-        // Обновляем состояние кнопки "Проверить"
+        // Update "Check" button state
         this.updateSubmitButton(this.assemblyState.length > 0);
     }
 
     /**
-     * Очистить зону сборки
+     * Clear assembly zone
      */
     clearAssembly() {
         const zone = document.getElementById('assembly-zone');
@@ -346,13 +346,13 @@ export class UIManager {
 
         this.assemblyState = [];
         
-        // Выключаем кнопку "Проверить"
+        // Disable "Check" button
         this.updateSubmitButton(false);
     }
 
     /**
-     * Получить собранный ответ
-     * @param {string} type - Тип: 'assembly' или 'phrase_assembly'
+     * Get assembled answer
+     * @param {string} type - Type: 'assembly' or 'phrase_assembly'
      * @returns {string}
      */
     getAssembledAnswer(type) {
@@ -363,7 +363,7 @@ export class UIManager {
     }
 
     /**
-     * Сбросить состояние сборки
+     * Reset assembly state
      */
     resetAssemblyState() {
         this.assemblyState = [];
