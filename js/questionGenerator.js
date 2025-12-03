@@ -60,26 +60,26 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Выбор русской буквы по грузинской
+     * Шаблон: Выбор русского перевода по грузинскому
      */
     static renderChoiceGeoRus(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
-        const allLetters = DataRepository.getAllLetters();
-        const others = allLetters.filter(l => l.rus !== correctAnswer);
-        const distractors = Utils.getRandomElements(others, 3).map(l => l.rus);
+        // Фильтруем только элементы с полем rus (исключаем фразы с rus_phrase)
+        const others = allItems.filter(i => i.rus && i.rus !== correctAnswer);
+        const distractors = Utils.getRandomElements(others, 3).map(i => i.rus);
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">Какая буква соответствует?</p>
-            <div class="display-1 fw-bold text-primary ${fontClass}">${item.geo}</div>
+            <p class="text-muted mb-2">${item.type === 'word' ? 'Выберите перевод' : 'Какая буква соответствует?'}</p>
+            <div class="${item.type === 'word' ? 'display-4' : 'display-1'} fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
         answerContainer.innerHTML = `
             <div class="row g-2">
                 ${options.map(opt => `
                     <div class="col-6">
-                        <button class="btn btn-outline-secondary w-100 py-3 fs-3 fw-bold option-btn" data-answer="${opt}">${opt}</button>
+                        <button class="btn btn-outline-secondary w-100 py-3 fs-4 fw-bold option-btn" data-answer="${opt}">${opt}</button>
                     </div>
                 `).join('')}
             </div>
@@ -89,18 +89,18 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Выбор грузинской буквы по русской
+     * Шаблон: Выбор грузинского по русскому
      */
     static renderChoiceRusGeo(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo;
-        const allLetters = DataRepository.getAllLetters();
-        const others = allLetters.filter(l => l.geo !== correctAnswer);
-        const distractors = Utils.getRandomElements(others, 3).map(l => l.geo);
+        // Фильтруем только элементы с полем geo (исключаем некорректные)
+        const others = allItems.filter(i => i.geo && i.geo !== correctAnswer);
+        const distractors = Utils.getRandomElements(others, 3).map(i => i.geo);
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">Выберите на грузинском</p>
+            <p class="text-muted mb-2">${item.type === 'word' ? 'Выберите перевод' : 'Выберите на грузинском'}</p>
             <div class="display-4 fw-bold text-primary">${item.rus}</div>
         `;
 
@@ -108,7 +108,7 @@ export class QuestionRendererFactory {
             <div class="row g-2">
                 ${options.map(opt => `
                     <div class="col-6">
-                        <button class="btn btn-outline-secondary w-100 py-3 fs-3 fw-bold option-btn ${fontClass}" data-answer="${opt}">${opt}</button>
+                        <button class="btn btn-outline-secondary w-100 py-3 fs-4 fw-bold option-btn ${fontClass}" data-answer="${opt}">${opt}</button>
                     </div>
                 `).join('')}
             </div>
@@ -147,13 +147,14 @@ export class QuestionRendererFactory {
     }
 
     /**
-     * Шаблон: Ввод грузинской буквы по русской
+     * Шаблон: Ввод грузинского по русскому
      */
     static renderInputRusGeo(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.geo;
+        const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">Напишите на грузинском</p>
+            <p class="text-muted mb-2">${item.type === 'word' ? 'Напишите перевод' : 'Напишите на грузинском'}</p>
             <div class="display-4 fw-bold text-primary">${item.rus}</div>
         `;
 
@@ -161,7 +162,7 @@ export class QuestionRendererFactory {
             <div class="d-flex flex-column gap-2">
                 <input 
                     type="text" 
-                    class="form-control form-control-lg text-center fs-3 fw-bold" 
+                    class="form-control form-control-lg text-center fs-3 fw-bold ${fontClass}" 
                     id="answer-input"
                     placeholder="Введите ответ..." 
                     autocomplete="off"

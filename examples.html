@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Примеры заданий — Georgian Trainer</title>
+    <!-- Google Fonts — Georgian -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;700&family=Noto+Serif+Georgian:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .geo-font {
+            font-family: 'Noto Sans Georgian', 'Noto Serif Georgian', sans-serif;
+        }
+        .example-card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #fff;
+        }
+        .example-card .question-area {
+            background: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+        .example-card .answer-area {
+            border-top: 1px solid #e9ecef;
+            padding-top: 0.75rem;
+        }
+        .template-badge {
+            font-size: 0.75rem;
+        }
+        .module-section {
+            margin-bottom: 2rem;
+        }
+        .assembled-letter {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            margin: 0.125rem;
+            background: #0d6efd;
+            color: white;
+            border-radius: 0.25rem;
+            font-weight: bold;
+        }
+        .letter-pool-btn {
+            padding: 0.375rem 0.75rem;
+            margin: 0.125rem;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <!-- Header -->
+        <header class="mb-4">
+            <nav class="d-flex align-items-center gap-3 mb-3">
+                <a href="index.html" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> На главную
+                </a>
+            </nav>
+            <h1 class="text-primary">
+                <span class="geo-font">ქართული</span> — Примеры заданий
+            </h1>
+            <p class="text-muted">Все типы вопросов, используемые в тренажёре</p>
+        </header>
+
+        <!-- ========== МОДУЛЬ: БУКВЫ ========== -->
+        <section class="module-section">
+            <h2 class="border-bottom pb-2 mb-3">
+                <i class="bi bi-alphabet text-primary"></i> Модуль: Изучение букв
+            </h2>
+            <p class="text-muted mb-3">6 типов заданий для запоминания грузинского алфавита</p>
+
+            <!-- 1. choice_geo_rus -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">1. Выбор перевода (груз → рус)</h5>
+                    <span class="badge bg-info template-badge">choice_geo_rus</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Выберите правильный перевод</p>
+                    <div class="display-1 fw-bold text-primary geo-font">გ</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <button class="btn btn-outline-secondary">д</button>
+                        <button class="btn btn-success">г</button>
+                        <button class="btn btn-outline-secondary">б</button>
+                        <button class="btn btn-outline-secondary">в</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. choice_rus_geo -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">2. Выбор буквы (рус → груз)</h5>
+                    <span class="badge bg-info template-badge">choice_rus_geo</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Выберите грузинскую букву</p>
+                    <div class="display-4 fw-bold text-primary">м</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <button class="btn btn-outline-secondary geo-font fs-4">ნ</button>
+                        <button class="btn btn-outline-secondary geo-font fs-4">ლ</button>
+                        <button class="btn btn-success geo-font fs-4">მ</button>
+                        <button class="btn btn-outline-secondary geo-font fs-4">კ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. input_geo_rus -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">3. Ввод перевода (груз → рус)</h5>
+                    <span class="badge bg-warning text-dark template-badge">input_geo_rus</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Напишите соответствие</p>
+                    <div class="display-1 fw-bold text-primary geo-font">შ</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-column gap-2">
+                        <input type="text" class="form-control form-control-lg text-center" value="ш" readonly>
+                        <button class="btn btn-primary btn-lg">Проверить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. input_rus_geo -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">4. Ввод буквы (рус → груз)</h5>
+                    <span class="badge bg-warning text-dark template-badge">input_rus_geo</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Напишите на грузинском</p>
+                    <div class="display-4 fw-bold text-primary">д</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-column gap-2">
+                        <input type="text" class="form-control form-control-lg text-center geo-font" value="დ" readonly>
+                        <button class="btn btn-primary btn-lg">Проверить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. word_assembly -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">5. Сборка слова из букв</h5>
+                    <span class="badge bg-success template-badge">word_assembly</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Соберите слово из букв</p>
+                    <div class="fs-2 fw-bold text-primary">ката</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="border rounded p-3 bg-light d-flex flex-wrap gap-2 justify-content-center">
+                            <span class="assembled-letter geo-font">კ</span>
+                            <span class="assembled-letter geo-font">ა</span>
+                            <span class="assembled-letter geo-font">ტ</span>
+                            <span class="assembled-letter geo-font">ა</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 justify-content-center">
+                            <button class="btn btn-outline-secondary letter-pool-btn geo-font" disabled>ა</button>
+                            <button class="btn btn-outline-secondary letter-pool-btn geo-font" disabled>კ</button>
+                            <button class="btn btn-outline-secondary letter-pool-btn geo-font">ბ</button>
+                            <button class="btn btn-outline-secondary letter-pool-btn geo-font" disabled>ტ</button>
+                            <button class="btn btn-outline-secondary letter-pool-btn geo-font">გ</button>
+                            <button class="btn btn-outline-secondary letter-pool-btn geo-font" disabled>ა</button>
+                        </div>
+                        <button class="btn btn-primary">Проверить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. translit_input -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">6. Транслитерация слова</h5>
+                    <span class="badge bg-warning text-dark template-badge">translit_input</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Напишите транслитерацию</p>
+                    <div class="display-4 fw-bold text-primary geo-font">სახლი</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-column gap-2">
+                        <input type="text" class="form-control form-control-lg text-center" value="сахли" readonly>
+                        <button class="btn btn-primary btn-lg">Проверить</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== МОДУЛЬ: СЛОВА И ФРАЗЫ ========== -->
+        <section class="module-section">
+            <h2 class="border-bottom pb-2 mb-3">
+                <i class="bi bi-book text-primary"></i> Модуль: Слова и фразы
+            </h2>
+            <p class="text-muted mb-3">3 типа заданий для изучения слов и фраз</p>
+
+            <!-- 1. choice_geo_rus (для слов) -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">1. Выбор перевода слова</h5>
+                    <span class="badge bg-info template-badge">choice_geo_rus</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Выберите правильный перевод</p>
+                    <div class="display-4 fw-bold text-primary geo-font">წიგნი</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <button class="btn btn-outline-secondary">дом</button>
+                        <button class="btn btn-success">книга</button>
+                        <button class="btn btn-outline-secondary">вода</button>
+                        <button class="btn btn-outline-secondary">гора</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. translate_input -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">2. Ввод перевода слова</h5>
+                    <span class="badge bg-warning text-dark template-badge">translate_input</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Переведите слово</p>
+                    <div class="display-4 fw-bold text-primary geo-font">მეგობარი</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-column gap-2">
+                        <input type="text" class="form-control form-control-lg text-center" value="друг" readonly>
+                        <button class="btn btn-primary btn-lg">Проверить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. phrase_assembly -->
+            <div class="example-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">3. Сборка фразы из слов</h5>
+                    <span class="badge bg-success template-badge">phrase_assembly</span>
+                </div>
+                <div class="question-area">
+                    <p class="text-muted mb-1">Соберите фразу</p>
+                    <div class="fs-4 fw-bold text-primary">Это мой дом.</div>
+                </div>
+                <div class="answer-area">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="border rounded p-3 bg-light d-flex flex-wrap gap-2 justify-content-center">
+                            <span class="assembled-letter geo-font">ეს</span>
+                            <span class="assembled-letter geo-font">ჩემი</span>
+                            <span class="assembled-letter geo-font">სახლია.</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 justify-content-center">
+                            <button class="btn btn-outline-secondary geo-font" disabled>სახლია.</button>
+                            <button class="btn btn-outline-secondary geo-font" disabled>ჩემი</button>
+                            <button class="btn btn-outline-secondary geo-font" disabled>ეს</button>
+                        </div>
+                        <button class="btn btn-primary">Проверить</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-muted py-4 border-top mt-4">
+            <p class="mb-0">Georgian Trainer — Тренажёр грузинского языка</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

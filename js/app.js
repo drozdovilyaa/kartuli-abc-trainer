@@ -281,8 +281,14 @@ export class App {
             ];
             return templates[Utils.getRandomInt(0, templates.length)];
         } else if (item.type === 'word') {
-            // Для слов — только перевод
-            return 'translate_input';
+            // Для слов — выбор или ввод перевода в обе стороны
+            const templates = [
+                'choice_geo_rus',      // Грузинское слово → выбор русского перевода
+                'choice_rus_geo',      // Русское слово → выбор грузинского перевода
+                'translate_input',     // Грузинское слово → ввод русского перевода
+                'input_rus_geo'        // Русское слово → ввод грузинского перевода
+            ];
+            return templates[Utils.getRandomInt(0, templates.length)];
         } else if (item.type === 'phrase') {
             // Для фраз — сборка из слов
             return 'phrase_assembly';
