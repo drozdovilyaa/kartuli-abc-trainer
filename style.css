@@ -1,6 +1,6 @@
 /* ========================================
    Georgian Trainer — Custom Styles
-   Дополнение к Bootstrap 5.3
+   Bootstrap 5.3 Extension
    ======================================== */
 
 /* CSS Variables */
@@ -72,18 +72,18 @@ body {
         flex-direction: column;
     }
     
-    /* На мобильных вопрос занимает больше места */
+    /* On mobile, question takes more space */
     .question-center {
         flex: 1;
     }
     
-    /* Ответы внизу, компактнее */
+    /* Answers at bottom, more compact */
     .answer-bottom {
         flex-shrink: 0;
         max-height: 40vh;
     }
     
-    /* Когда клавиатура открыта — input area становится fixed */
+    /* When keyboard is open — input area becomes fixed */
     .keyboard-open .answer-bottom {
         position: fixed;
         left: 0;
