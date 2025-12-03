@@ -50,6 +50,7 @@ export const MOCK_DATA = {
 
     // Слова для изучения
     words: [
+        // Базовые слова (семья)
         { id: "w1", geo: "მამა", rus: "отец", translit: "мама", type: "word" },
         { id: "w2", geo: "დედა", rus: "мать", translit: "дэда", type: "word" },
         { id: "w3", geo: "სახლი", rus: "дом", translit: "сахли", type: "word" },
@@ -79,7 +80,192 @@ export const MOCK_DATA = {
         { id: "w27", geo: "დიდი", rus: "большой", translit: "диди", type: "word" },
         { id: "w28", geo: "პატარა", rus: "маленький", translit: "патара", type: "word" },
         { id: "w29", geo: "ახალი", rus: "новый", translit: "ахали", type: "word" },
-        { id: "w30", geo: "ლამაზი", rus: "красивый", translit: "ламази", type: "word" }
+        { id: "w30", geo: "ლამაზი", rus: "красивый", translit: "ламази", type: "word" },
+        // Вопросительные слова
+        { id: "w31", geo: "ვინ", rus: "кто", translit: "вин", type: "word" },
+        { id: "w32", geo: "რა", rus: "что", translit: "ра", type: "word" },
+        { id: "w33", geo: "სად", rus: "где / куда", translit: "сад", type: "word" },
+        { id: "w34", geo: "როდის", rus: "когда", translit: "родис", type: "word" },
+        { id: "w35", geo: "რატომ", rus: "почему", translit: "ратом", type: "word" },
+        { id: "w36", geo: "როგორ", rus: "как", translit: "рогор", type: "word" },
+        { id: "w37", geo: "რამდენი", rus: "сколько", translit: "рамдэни", type: "word" },
+        // Места и транспорт
+        { id: "w38", geo: "ბაზარი", rus: "рынок", translit: "базари", type: "word" },
+        { id: "w39", geo: "ტაქსი", rus: "такси", translit: "такси", type: "word" },
+        { id: "w40", geo: "პარკი", rus: "парк", translit: "парки", type: "word" },
+        { id: "w41", geo: "ფეხი", rus: "нога", translit: "пэхи", type: "word" },
+        { id: "w42", geo: "მანქანა", rus: "машина", translit: "манкана", type: "word" },
+        { id: "w43", geo: "სამუშაო", rus: "работа", translit: "самушао", type: "word" },
+        { id: "w44", geo: "სკოლა", rus: "школа", translit: "скола", type: "word" },
+        { id: "w45", geo: "ავტობუსი", rus: "автобус", translit: "автобуси", type: "word" },
+        { id: "w46", geo: "გოგო", rus: "девушка", translit: "гого", type: "word" },
+        // Семья (расширенная)
+        { id: "w47", geo: "შვილი", rus: "ребёнок / сын", translit: "швили", type: "word" },
+        { id: "w48", geo: "ბებია", rus: "бабушка", translit: "бэбиа", type: "word" },
+        { id: "w49", geo: "ბაბუა", rus: "дедушка", translit: "бабуа", type: "word" },
+        { id: "w50", geo: "ოჯახი", rus: "семья", translit: "оджахи", type: "word" },
+        { id: "w51", geo: "მშობელი", rus: "родитель", translit: "мшобэли", type: "word" },
+        { id: "w52", geo: "მშობლები", rus: "родители", translit: "мшоблэби", type: "word" },
+        { id: "w53", geo: "ქმარი", rus: "муж", translit: "кмари", type: "word" },
+        { id: "w54", geo: "ცოლი", rus: "жена", translit: "цоли", type: "word" },
+        // Природа и места
+        { id: "w55", geo: "ტყე", rus: "лес", translit: "тке", type: "word" },
+        { id: "w56", geo: "რესტორანი", rus: "ресторан", translit: "рэсторани", type: "word" },
+        { id: "w57", geo: "ქუჩა", rus: "улица", translit: "куча", type: "word" },
+        { id: "w58", geo: "ადგილი", rus: "место", translit: "адгили", type: "word" },
+        { id: "w59", geo: "ტბა", rus: "озеро", translit: "тба", type: "word" },
+        { id: "w60", geo: "მდინარე", rus: "река", translit: "мдинарэ", type: "word" },
+        { id: "w61", geo: "ცა", rus: "небо", translit: "ца", type: "word" },
+        { id: "w62", geo: "მთვარე", rus: "луна", translit: "мтварэ", type: "word" },
+        // Люди и профессии
+        { id: "w63", geo: "ბიჭი", rus: "мальчик", translit: "бичи", type: "word" },
+        { id: "w64", geo: "ადამიანი", rus: "человек", translit: "адамиани", type: "word" },
+        { id: "w65", geo: "თანამშრომელი", rus: "сотрудник", translit: "танамшромэли", type: "word" },
+        { id: "w66", geo: "ექიმი", rus: "врач", translit: "экими", type: "word" },
+        { id: "w67", geo: "მოსწავლე", rus: "ученик", translit: "мосцавлэ", type: "word" },
+        // Мебель и дом
+        { id: "w68", geo: "სკამი", rus: "стул", translit: "сками", type: "word" },
+        { id: "w69", geo: "მაგიდა", rus: "стол", translit: "магида", type: "word" },
+        { id: "w70", geo: "კარი", rus: "дверь", translit: "кари", type: "word" },
+        { id: "w71", geo: "ფანჯარა", rus: "окно", translit: "панджара", type: "word" },
+        { id: "w72", geo: "ხალიჩა", rus: "ковёр", translit: "халича", type: "word" },
+        { id: "w73", geo: "კარადა", rus: "шкаф", translit: "карада", type: "word" },
+        { id: "w74", geo: "სამზარეულო", rus: "кухня", translit: "самзарэуло", type: "word" },
+        { id: "w75", geo: "ოთახები", rus: "комнаты", translit: "отахэби", type: "word" },
+        // Числа
+        { id: "w76", geo: "ერთი", rus: "один", translit: "эрти", type: "word" },
+        { id: "w77", geo: "ორი", rus: "два", translit: "ори", type: "word" },
+        { id: "w78", geo: "სამი", rus: "три", translit: "сами", type: "word" },
+        { id: "w79", geo: "ოთხი", rus: "четыре", translit: "отхи", type: "word" },
+        { id: "w80", geo: "ხუთი", rus: "пять", translit: "хути", type: "word" },
+        { id: "w81", geo: "ექვსი", rus: "шесть", translit: "эквси", type: "word" },
+        { id: "w82", geo: "შვიდი", rus: "семь", translit: "швиди", type: "word" },
+        { id: "w83", geo: "რვა", rus: "восемь", translit: "рва", type: "word" },
+        { id: "w84", geo: "ცხრა", rus: "девять", translit: "цхра", type: "word" },
+        { id: "w85", geo: "ათი", rus: "десять", translit: "ати", type: "word" },
+        // Дни недели
+        { id: "w86", geo: "ორშაბათი", rus: "понедельник", translit: "оршабати", type: "word" },
+        { id: "w87", geo: "სამშაბათი", rus: "вторник", translit: "самшабати", type: "word" },
+        { id: "w88", geo: "ოთხშაბათი", rus: "среда", translit: "отхшабати", type: "word" },
+        { id: "w89", geo: "ხუთშაბათი", rus: "четверг", translit: "хутшабати", type: "word" },
+        { id: "w90", geo: "პარასკევი", rus: "пятница", translit: "параскэви", type: "word" },
+        { id: "w91", geo: "შაბათი", rus: "суббота", translit: "шабати", type: "word" },
+        { id: "w92", geo: "კვირა", rus: "воскресенье / неделя", translit: "квира", type: "word" },
+        // Прилагательные
+        { id: "w93", geo: "ჭკვიანი", rus: "умный", translit: "чквиани", type: "word" },
+        { id: "w94", geo: "უფროსი", rus: "старший", translit: "упроси", type: "word" },
+        { id: "w95", geo: "უმცროსი", rus: "младший", translit: "умцроси", type: "word" },
+        { id: "w96", geo: "გემრიელი", rus: "вкусный", translit: "гэмриэли", type: "word" },
+        { id: "w97", geo: "რთული", rus: "трудный, сложный", translit: "ртули", type: "word" },
+        { id: "w98", geo: "მშობლიური", rus: "родной", translit: "мшоблиури", type: "word" },
+        { id: "w99", geo: "მაგარი", rus: "классный", translit: "магари", type: "word" },
+        { id: "w100", geo: "მძიმე", rus: "тяжёлый", translit: "мдзимэ", type: "word" },
+        { id: "w101", geo: "მსუბუქი", rus: "лёгкий", translit: "мсубуки", type: "word" },
+        { id: "w102", geo: "სწრაფი", rus: "быстрый", translit: "сцрапи", type: "word" },
+        { id: "w103", geo: "ახალგაზრდა", rus: "молодой", translit: "ахалгазрда", type: "word" },
+        { id: "w104", geo: "ხანდაზმული", rus: "пожилой", translit: "хандазмули", type: "word" },
+        // Существительные (разное)
+        { id: "w105", geo: "ჩანთა", rus: "сумка", translit: "чанта", type: "word" },
+        { id: "w106", geo: "ველოსიპედი", rus: "велосипед", translit: "вэлосипэди", type: "word" },
+        { id: "w107", geo: "სახელი", rus: "имя", translit: "сахэли", type: "word" },
+        { id: "w108", geo: "გვარი", rus: "фамилия", translit: "гвари", type: "word" },
+        { id: "w109", geo: "მისამართი", rus: "адрес", translit: "мисамарти", type: "word" },
+        { id: "w110", geo: "სახე", rus: "лицо", translit: "сахэ", type: "word" },
+        { id: "w111", geo: "წევრები", rus: "члены", translit: "цэврэби", type: "word" },
+        { id: "w112", geo: "ვალდებულება", rus: "обязанность", translit: "валдэбулэба", type: "word" },
+        { id: "w113", geo: "ოფისი", rus: "офис", translit: "описи", type: "word" },
+        { id: "w114", geo: "კაბინეტი", rus: "кабинет", translit: "кабинэти", type: "word" },
+        { id: "w115", geo: "გაკვეთილი", rus: "урок", translit: "гаквэтили", type: "word" },
+        { id: "w116", geo: "კითხვა", rus: "вопрос / чтение", translit: "китхва", type: "word" },
+        { id: "w117", geo: "ფასი", rus: "цена", translit: "паси", type: "word" },
+        { id: "w118", geo: "სოფელი", rus: "деревня", translit: "сопэли", type: "word" },
+        { id: "w119", geo: "რაფა", rus: "подоконник", translit: "рапа", type: "word" },
+        { id: "w120", geo: "ფერი", rus: "цвет", translit: "пэри", type: "word" },
+        { id: "w121", geo: "ჯიბე", rus: "карман", translit: "джибэ", type: "word" },
+        { id: "w122", geo: "მეორე", rus: "второй", translit: "мэорэ", type: "word" },
+        { id: "w123", geo: "მხარე", rus: "сторона", translit: "мхарэ", type: "word" },
+        { id: "w124", geo: "გაჩერება", rus: "остановка", translit: "гачэрэба", type: "word" },
+        { id: "w125", geo: "მარჯვენა", rus: "справа", translit: "марджвэна", type: "word" },
+        { id: "w126", geo: "მარცხენა", rus: "слева", translit: "марцхэна", type: "word" },
+        { id: "w127", geo: "დღეები", rus: "дни", translit: "дгээби", type: "word" },
+        { id: "w128", geo: "კაბა", rus: "платье", translit: "каба", type: "word" },
+        { id: "w129", geo: "ქოლგა", rus: "зонт", translit: "колга", type: "word" },
+        { id: "w130", geo: "სუნი", rus: "запах", translit: "суни", type: "word" },
+        { id: "w131", geo: "გასაღები", rus: "ключ", translit: "гасагэби", type: "word" },
+        { id: "w132", geo: "მოგზაურობა", rus: "путешествие", translit: "могзауроба", type: "word" },
+        { id: "w133", geo: "სურვილი", rus: "желание", translit: "сурвили", type: "word" },
+        { id: "w134", geo: "ბოლო", rus: "конец", translit: "боло", type: "word" },
+        { id: "w135", geo: "შუადღე", rus: "полдень", translit: "шуадгэ", type: "word" },
+        { id: "w136", geo: "საათი", rus: "час", translit: "саати", type: "word" },
+        { id: "w137", geo: "სათვალე", rus: "очки", translit: "сатвалэ", type: "word" },
+        { id: "w138", geo: "შუქი", rus: "свет", translit: "шуки", type: "word" },
+        { id: "w139", geo: "საავადმყოფო", rus: "больница", translit: "саавадмкопо", type: "word" },
+        { id: "w140", geo: "პერსონალი", rus: "персонал", translit: "пэрсонали", type: "word" },
+        { id: "w141", geo: "სასტუმრო", rus: "гостиница", translit: "састумро", type: "word" },
+        { id: "w142", geo: "ნომერი", rus: "номер", translit: "номэри", type: "word" },
+        { id: "w143", geo: "საღამო", rus: "вечер", translit: "сагамо", type: "word" },
+        { id: "w144", geo: "დიზაინი", rus: "дизайн", translit: "дизаини", type: "word" },
+        { id: "w145", geo: "კუ", rus: "черепаха", translit: "ку", type: "word" },
+        // Страны и география
+        { id: "w146", geo: "ქვეყანა", rus: "страна", translit: "квэкана", type: "word" },
+        { id: "w147", geo: "საქართველო", rus: "Грузия", translit: "сакартвэло", type: "word" },
+        // Напитки и еда
+        { id: "w148", geo: "ყავა", rus: "кофе", translit: "кава", type: "word" },
+        { id: "w149", geo: "ლუდი", rus: "пиво", translit: "луди", type: "word" },
+        { id: "w150", geo: "შაქრიანი", rus: "с сахаром (сахарный)", translit: "шакриани", type: "word" },
+        { id: "w151", geo: "შაქრით", rus: "с сахаром", translit: "шакрит", type: "word" },
+        { id: "w152", geo: "უშაქრო", rus: "без сахара", translit: "ушакро", type: "word" },
+        { id: "w153", geo: "უშაქროდ", rus: "без сахара (наречие)", translit: "ушакрод", type: "word" },
+        { id: "w154", geo: "რძით", rus: "с молоком", translit: "рдзит", type: "word" },
+        { id: "w155", geo: "საჭმელი", rus: "еда", translit: "сачмэли", type: "word" },
+        { id: "w156", geo: "უმარილო", rus: "без соли", translit: "умарило", type: "word" },
+        { id: "w157", geo: "მარილიანი", rus: "солёный/с солью", translit: "марилиани", type: "word" },
+        { id: "w158", geo: "მარილი", rus: "соль", translit: "марили", type: "word" },
+        { id: "w159", geo: "წიწაკა", rus: "перец", translit: "цицака", type: "word" },
+        { id: "w160", geo: "პილპილი", rus: "перец (чёрный)", translit: "пилпили", type: "word" },
+        { id: "w161", geo: "მაიონეზი", rus: "майонез", translit: "маионэзи", type: "word" },
+        { id: "w162", geo: "შაურმა", rus: "шаурма", translit: "шаурма", type: "word" },
+        // Глаголы и действия
+        { id: "w163", geo: "მინდა", rus: "я хочу", translit: "минда", type: "word" },
+        { id: "w164", geo: "ვარ", rus: "я есть", translit: "вар", type: "word" },
+        { id: "w165", geo: "მიდიხარ", rus: "ты идёшь", translit: "мидихар", type: "word" },
+        { id: "w166", geo: "დალიო", rus: "выпить", translit: "далио", type: "word" },
+        { id: "w167", geo: "მირჩევნია", rus: "я предпочитаю", translit: "мирчэвниа", type: "word" },
+        { id: "w168", geo: "ვჭამ", rus: "я ем", translit: "вчам", type: "word" },
+        { id: "w169", geo: "მიირთვით", rus: "угощайтесь/ешьте", translit: "миртвит", type: "word" },
+        // Местоимения и частицы
+        { id: "w170", geo: "მე", rus: "я", translit: "мэ", type: "word" },
+        { id: "w171", geo: "ეს", rus: "это", translit: "эс", type: "word" },
+        { id: "w172", geo: "თქვენი", rus: "ваш", translit: "тквэни", type: "word" },
+        { id: "w173", geo: "მეც", rus: "я тоже", translit: "мэц", type: "word" },
+        // Наречия и союзы
+        { id: "w174", geo: "თუ", rus: "если, или", translit: "ту", type: "word" },
+        { id: "w175", geo: "მაგრამ", rus: "но", translit: "маграм", type: "word" },
+        { id: "w176", geo: "ცოტა", rus: "немного", translit: "цота", type: "word" },
+        { id: "w177", geo: "გარეშე", rus: "без (предлог)", translit: "гарэшэ", type: "word" },
+        { id: "w178", geo: "ზოგჯერ", rus: "иногда", translit: "зогджэр", type: "word" },
+        { id: "w179", geo: "ყოველთვის", rus: "всегда", translit: "ковэлтвис", type: "word" },
+        { id: "w180", geo: "მართლა", rus: "правда", translit: "мартла", type: "word" },
+        { id: "w181", geo: "რით", rus: "чем/с чем", translit: "рит", type: "word" },
+        // Фразы и выражения
+        { id: "w182", geo: "შეიძლება", rus: "можно, возможно", translit: "шэидзлэба", type: "word" },
+        { id: "w183", geo: "უკაცრავად", rus: "извините", translit: "укацравад", type: "word" },
+        { id: "w184", geo: "საშუალო", rus: "средний", translit: "сашуало", type: "word" },
+        { id: "w185", geo: "ყველაფრით", rus: "со всем", translit: "квэлаприт", type: "word" },
+        { id: "w186", geo: "არა", rus: "нет", translit: "ара", type: "word" },
+        { id: "w187", geo: "აი", rus: "вот", translit: "аи", type: "word" },
+        { id: "w188", geo: "მადლობა", rus: "спасибо", translit: "мадлоба", type: "word" },
+        { id: "w189", geo: "გემრიელად", rus: "вкусно", translit: "гэмриэлад", type: "word" },
+        { id: "w190", geo: "ყველაფერი", rus: "всё (абсолютно)", translit: "квэлапэри", type: "word" },
+        { id: "w191", geo: "არაფერი", rus: "ничего", translit: "арапэри", type: "word" },
+        { id: "w193", geo: "სალამი", rus: "привет", translit: "салами", type: "word" },
+        { id: "w194", geo: "გამარჯობა", rus: "здравствуй", translit: "гамарджоба", type: "word" },
+        { id: "w195", geo: "კაფეში", rus: "в кафе", translit: "капэши", type: "word" },
+        { id: "w196", geo: "როგორი", rus: "какой", translit: "рогори", type: "word" },
+        { id: "w197", geo: "ხსნადი", rus: "растворимый", translit: "хснади", type: "word" },
+        { id: "w198", geo: "თურქული", rus: "турецкий", translit: "туркули", type: "word" },
+        { id: "w199", geo: "აპარატული", rus: "аппаратный", translit: "апаратули", type: "word" },
+        { id: "w200", geo: "ყველანაირი", rus: "всякий, любой", translit: "квэланаири", type: "word" }
     ],
 
     // Фразы для изучения
@@ -139,6 +325,132 @@ export const MOCK_DATA = {
             geo_phrase: "ეს ჩვენი სკოლაა.",
             geo_words_shuffled: ["სკოლაა", "ჩვენი", "ეს"],
             type: "phrase"
-        }
+        },
+        {
+            id: "p9",
+            rus_phrase: "Георгий, куда ты идёшь?",
+            geo_phrase: "გიორგი, სად მიდიხარ?",
+            geo_words_shuffled: ["სად", "გიორგი", "მიდიხარ"],
+            type: "phrase"
+        },
+        {
+            id: "p10",
+            rus_phrase: "Где ресторан «Багратони»?",
+            geo_phrase: "სად არის რესტორანი „ბაგრატონი“?",
+            geo_words_shuffled: ["სად", "არის", "რესტორანი", "ბაგრატონი"],
+            type: "phrase"
+        },
+        {
+            id: "p11",
+            rus_phrase: "Извините, где улица Руставели?",
+            geo_phrase: "უკაცრავად, სად არის რუსთაველის ქუჩა?",
+            geo_words_shuffled: ["სად", "არის", "რუსთაველის", "ქუჩა", "უკაცრავად"],
+            type: "phrase"
+        },
+        {
+            id: "p12",
+            rus_phrase: "Нана, когда ты идёшь на работу?",
+            geo_phrase: "ნანა, როდის მიდიხარ სამსახურზე?",
+            geo_words_shuffled: ["როდის", "ნანა", "მიდიხარ", "სამსახურზე"],
+            type: "phrase"
+        },
+        {
+            id: "p13",
+            rus_phrase: "Лика, когда ты идёшь к Нане?",
+            geo_phrase: "ლიკა, როდის მიდიხარ ნანასთან?",
+            geo_words_shuffled: ["როდის", "ლიკა", "მიდიხარ", "ნანასთან"],
+            type: "phrase"
+        },
+        {
+            id: "p14",
+            rus_phrase: "Я еду на рынок на такси.",
+            geo_phrase: "მე მივდივარ ბაზარში ტაქსით.",
+            geo_words_shuffled: ["ტაქსით", "მე", "მივდივარ", "ბაზარში"],
+            type: "phrase"
+        },
+        {
+            id: "p15",
+            rus_phrase: "Моя подруга идёт в парк пешком.",
+            geo_phrase: "ჩემი დაქალი მიდის პარკში ფეხით.",
+            geo_words_shuffled: ["ფეხით", "ჩემი", "დაქალი", "მიდის", "პარკში"],
+            type: "phrase"
+        },
+        {
+            id: "p16",
+            rus_phrase: "Ты домой едешь на машине или идёшь пешком?",
+            geo_phrase: "შენ სახლში მანქანით მიდიხარ თუ ფეხით?",
+            geo_words_shuffled: ["ფეხით", "შენ", "სახლში", "მანქანით", "მიდიხარ", "თუ"],
+            type: "phrase"
+        },
+        {
+            id: "p17",
+            rus_phrase: "Мой друг идёт на работу пешком.",
+            geo_phrase: "ჩემი მეგობარი სამსახურში ფეხით მიდის.",
+            geo_words_shuffled: ["ფეხით", "ჩემი", "მეგობარი", "სამსახურში", "მიდის"],
+            type: "phrase"
+        },
+        {
+            id: "p18",
+            rus_phrase: "Мой ребёнок едет в школу на автобусе.",
+            geo_phrase: "ჩემი შვილი სკოლაში ავტობუსით მიდის.",
+            geo_words_shuffled: ["ავტობუსით", "ჩემი", "შვილი", "სკოლაში", "მიდის"],
+            type: "phrase"
+        },
+        {
+            id: "p19",
+            rus_phrase: "Моя дочь приходит домой пешком.",
+            geo_phrase: "ჩემი გოგო სახლში ფეხით მოდის.",
+            geo_words_shuffled: ["ფეხით", "ჩემი", "გოგო", "სახლში", "მოდის"],
+            type: "phrase"
+        },
+        {
+            id: "p20",
+            rus_phrase: "Я домой прихожу пешком.",
+            geo_phrase: "მე სახლში ფეხით მოვდივარ.",
+            geo_words_shuffled: ["ფეხით", "მე", "სახლში", "მოვდივარ"],
+            type: "phrase"
+        },
+        {
+            id: "p21",
+            rus_phrase: "Я иду на рынок.",
+            geo_phrase: "მე მივდივარ ბაზარში",
+            geo_words_shuffled: ["ბაზარში", "მე", "მივდივარ"],
+            type: "phrase"
+        },
+        {
+            id: "p22",
+            rus_phrase: "Ты идёшь домой.",
+            geo_phrase: "შენ მიდიხარ სახლში",
+            geo_words_shuffled: ["სახლში", "შენ", "მიდიხარ"],
+            type: "phrase"
+        },
+        {
+            id: "p23",
+            rus_phrase: "Он идёт в Батуми.",
+            geo_phrase: "ის მიდის ბათუმში",
+            geo_words_shuffled: ["ის", "მიდის", "ბათუმში"],
+            type: "phrase"
+    },
+    {
+        id: "p24",
+        rus_phrase: "Мы идём в Тбилиси.",
+        geo_phrase: "ჩვენ მივდივართ თბილისში",
+        geo_words_shuffled: ["თბილისში", "ჩვენ", "მივდივართ"],
+        type: "phrase"
+    },
+    {
+        id: "p25",
+        rus_phrase: "Вы идёте в Кутаиси.",
+        geo_phrase: "თქვენ მიდიხართ ქუთაისში",
+        geo_words_shuffled: ["ქუთაისში", "თქვენ", "მიდიხართ"],
+        type: "phrase"
+    },
+    {
+        id: "p26",
+        rus_phrase: "Они идут в Кобулети.",
+        geo_phrase: "ისინი მიდიან ქობულეთში",
+        geo_words_shuffled: ["ისინი", "მიდიან", "ქობულეთში"],
+        type: "phrase"
+    }
     ]
 };
