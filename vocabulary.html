@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Словарь — Georgian Trainer</title>
+    <!-- Google Fonts — Georgian -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;700&family=Noto+Serif+Georgian:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Override main styles to allow scrolling */
+        html, body {
+            height: auto;
+            overflow: auto;
+        }
+        
+        .vocabulary-page {
+            min-height: 100vh;
+            background: #f0f2f5;
+            padding: 1rem;
+        }
+        
+        .vocabulary-card {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .vocabulary-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .vocabulary-content {
+            padding: 1.5rem;
+        }
+        
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .nav-tabs .nav-link {
+            font-weight: 600;
+            color: #6c757d;
+            border: none;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            border-bottom: 3px solid #0d6efd;
+            background: transparent;
+        }
+        
+        .nav-tabs .nav-link:hover:not(.active) {
+            color: #0d6efd;
+            border-color: transparent;
+        }
+        
+        /* Search and filter */
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-bar .form-control,
+        .filter-bar .form-select {
+            max-width: 250px;
+        }
+        
+        /* Word table */
+        .word-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .word-table th {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+        
+        .word-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        .word-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .geo-word {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+            font-family: 'Noto Sans Georgian', sans-serif;
+        }
+        
+        .rus-word {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .translit {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .plural {
+            font-size: 1rem;
+            color: #198754;
+            font-family: 'Noto Sans Georgian', sans-serif;
+        }
+        
+        .part-of-speech {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            background: #e9ecef;
+            color: #495057;
+            white-space: nowrap;
+        }
+        
+        .word-comment {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        /* Phrase table */
+        .phrase-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .phrase-table th {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.875rem;
+        }
+        
+        .phrase-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        .phrase-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .geo-phrase {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #0d6efd;
+            font-family: 'Noto Sans Georgian', sans-serif;
+        }
+        
+        .rus-phrase {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .phrase-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+        
+        .phrase-words .badge {
+            font-family: 'Noto Sans Georgian', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .vocabulary-page {
+                padding: 0;
+            }
+            
+            .vocabulary-card {
+                border-radius: 0;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+            }
+            
+            .filter-bar .form-control,
+            .filter-bar .form-select {
+                max-width: 100%;
+            }
+            
+            .word-table th,
+            .word-table td,
+            .phrase-table th,
+            .phrase-table td {
+                padding: 0.4rem 0.25rem;
+                font-size: 0.85rem;
+            }
+            
+            .geo-word {
+                font-size: 1.1rem;
+            }
+            
+            .geo-phrase {
+                font-size: 1rem;
+            }
+            
+            .translit {
+                font-size: 0.75rem;
+            }
+            
+            .rus-word {
+                font-size: 0.9rem;
+            }
+            
+            .plural {
+                font-size: 0.85rem;
+            }
+            
+            .part-of-speech {
+                font-size: 0.65rem;
+                padding: 0.15rem 0.3rem;
+            }
+            
+            /* Hide only comment column on mobile */
+            .hide-mobile-comment {
+                display: none;
+            }
+            
+            /* Show mobile comment row */
+            .mobile-comment {
+                display: table-row !important;
+                background: #fffbeb;
+            }
+            
+            .mobile-comment td {
+                padding: 0.5rem !important;
+                border-bottom: 2px solid #ffc107;
+            }
+        }
+        
+        /* Mobile comment row - hidden on desktop */
+        .mobile-comment {
+            display: none;
+        }
+        
+        .mobile-comment-text {
+            font-size: 0.85rem;
+            color: #856404;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mobile-comment-text .bi {
+            color: #ffc107;
+            font-size: 1rem;
+        }
+        
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="vocabulary-page">
+        <div class="vocabulary-card">
+            <header class="vocabulary-header">
+                <a href="index.html" class="btn btn-outline-secondary btn-sm mb-3">
+                    <i class="bi bi-arrow-left"></i> Назад
+                </a>
+                <h1 class="h3 text-primary fw-bold mb-1">ლექსიკონი</h1>
+                <p class="text-muted mb-0">Словарь слов и фраз</p>
+            </header>
+            
+            <div class="vocabulary-content">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs mb-4" id="vocabularyTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="words-tab" data-bs-toggle="tab" data-bs-target="#words-panel" type="button" role="tab">
+                            <i class="bi bi-book me-1"></i> Слова
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="phrases-tab" data-bs-toggle="tab" data-bs-target="#phrases-panel" type="button" role="tab">
+                            <i class="bi bi-chat-quote me-1"></i> Фразы
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="vocabularyTabContent">
+                    <!-- Words Tab -->
+                    <div class="tab-pane fade show active" id="words-panel" role="tabpanel">
+                        <!-- Stats -->
+                        <div class="stats-bar">
+                            <div class="stat-item">
+                                <span class="stat-number" id="words-count">0</span>
+                                <span class="stat-label">слов</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="pos-count">0</span>
+                                <span class="stat-label">частей речи</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter -->
+                        <div class="filter-bar">
+                            <input type="text" class="form-control" id="words-search" placeholder="Поиск по слову...">
+                            <select class="form-select" id="pos-filter">
+                                <option value="">Все части речи</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="word-table">
+                                <thead>
+                                    <tr>
+                                        <th>№</th>
+                                        <th>Грузинский</th>
+                                        <th>Транслит</th>
+                                        <th>Перевод</th>
+                                        <th>Множ. ч.</th>
+                                        <th>Часть речи</th>
+                                        <th class="hide-mobile-comment">Комментарий</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="words-body">
+                                    <!-- Will be filled by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="no-results d-none" id="words-no-results">
+                            <i class="bi bi-search"></i>
+                            <p>Ничего не найдено</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Phrases Tab -->
+                    <div class="tab-pane fade" id="phrases-panel" role="tabpanel">
+                        <!-- Stats -->
+                        <div class="stats-bar">
+                            <div class="stat-item">
+                                <span class="stat-number" id="phrases-count">0</span>
+                                <span class="stat-label">фраз</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter -->
+                        <div class="filter-bar">
+                            <input type="text" class="form-control" id="phrases-search" placeholder="Поиск по фразе...">
+                        </div>
+                        
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="phrase-table">
+                                <thead>
+                                    <tr>
+                                        <th>№</th>
+                                        <th>Грузинский</th>
+                                        <th>Перевод</th>
+                                        <th class="hide-mobile">Слова</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="phrases-body">
+                                    <!-- Will be filled by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="no-results d-none" id="phrases-no-results">
+                            <i class="bi bi-search"></i>
+                            <p>Ничего не найдено</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { WORDS } from './js/data/words.js';
+        import { PHRASES } from './js/data/phrases.js';
+        
+        // ===== WORDS =====
+        const wordsBody = document.getElementById('words-body');
+        const wordsCount = document.getElementById('words-count');
+        const posCount = document.getElementById('pos-count');
+        const wordsSearch = document.getElementById('words-search');
+        const posFilter = document.getElementById('pos-filter');
+        const wordsNoResults = document.getElementById('words-no-results');
+        
+        // Get unique parts of speech
+        const partsOfSpeech = [...new Set(WORDS.map(w => w.partOfSpeech).filter(Boolean))];
+        posCount.textContent = partsOfSpeech.length;
+        
+        // Fill POS filter
+        partsOfSpeech.forEach(pos => {
+            const option = document.createElement('option');
+            option.value = pos;
+            option.textContent = pos;
+            posFilter.appendChild(option);
+        });
+        
+        // Render words
+        function renderWords(words) {
+            wordsBody.innerHTML = '';
+            wordsCount.textContent = words.length;
+            
+            if (words.length === 0) {
+                wordsNoResults.classList.remove('d-none');
+                return;
+            }
+            
+            wordsNoResults.classList.add('d-none');
+            
+            words.forEach((word, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="text-muted">${index + 1}</td>
+                    <td class="geo-word">${word.geo}</td>
+                    <td class="translit">${word.translit || '—'}</td>
+                    <td class="rus-word">${word.rus}</td>
+                    <td class="plural">${word.plural || '—'}</td>
+                    <td>${word.partOfSpeech ? `<span class="part-of-speech">${word.partOfSpeech}</span>` : '—'}</td>
+                    <td class="word-comment hide-mobile-comment">${word.comment || '—'}</td>
+                `;
+                wordsBody.appendChild(row);
+                
+                // Add mobile comment row if comment exists
+                if (word.comment) {
+                    const commentRow = document.createElement('tr');
+                    commentRow.className = 'mobile-comment';
+                    commentRow.innerHTML = `
+                        <td colspan="6">
+                            <div class="mobile-comment-text">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                ${word.comment}
+                            </div>
+                        </td>
+                    `;
+                    wordsBody.appendChild(commentRow);
+                }
+            });
+        }
+        
+        // Filter words
+        function filterWords() {
+            const search = wordsSearch.value.toLowerCase().trim();
+            const pos = posFilter.value;
+            
+            let filtered = WORDS;
+            
+            if (search) {
+                filtered = filtered.filter(w => 
+                    w.geo.toLowerCase().includes(search) ||
+                    w.rus.toLowerCase().includes(search) ||
+                    (w.translit && w.translit.toLowerCase().includes(search))
+                );
+            }
+            
+            if (pos) {
+                filtered = filtered.filter(w => w.partOfSpeech === pos);
+            }
+            
+            renderWords(filtered);
+        }
+        
+        wordsSearch.addEventListener('input', filterWords);
+        posFilter.addEventListener('change', filterWords);
+        
+        // Initial render
+        renderWords(WORDS);
+        
+        // ===== PHRASES =====
+        const phrasesBody = document.getElementById('phrases-body');
+        const phrasesCount = document.getElementById('phrases-count');
+        const phrasesSearch = document.getElementById('phrases-search');
+        const phrasesNoResults = document.getElementById('phrases-no-results');
+        
+        // Render phrases
+        function renderPhrases(phrases) {
+            phrasesBody.innerHTML = '';
+            phrasesCount.textContent = phrases.length;
+            
+            if (phrases.length === 0) {
+                phrasesNoResults.classList.remove('d-none');
+                return;
+            }
+            
+            phrasesNoResults.classList.add('d-none');
+            
+            phrases.forEach((phrase, index) => {
+                const wordsHtml = (phrase.geo_words_shuffled || [])
+                    .map(w => `<span class="badge bg-secondary">${w}</span>`)
+                    .join('');
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="text-muted">${index + 1}</td>
+                    <td class="geo-phrase">${phrase.geo_phrase}</td>
+                    <td class="rus-phrase">${phrase.rus_phrase}</td>
+                    <td class="phrase-words hide-mobile">${wordsHtml || '—'}</td>
+                `;
+                phrasesBody.appendChild(row);
+            });
+        }
+        
+        // Filter phrases
+        function filterPhrases() {
+            const search = phrasesSearch.value.toLowerCase().trim();
+            
+            let filtered = PHRASES;
+            
+            if (search) {
+                filtered = filtered.filter(p => 
+                    p.geo_phrase.toLowerCase().includes(search) ||
+                    p.rus_phrase.toLowerCase().includes(search)
+                );
+            }
+            
+            renderPhrases(filtered);
+        }
+        
+        phrasesSearch.addEventListener('input', filterPhrases);
+        
+        // Initial render
+        renderPhrases(PHRASES);
+    </script>
+</body>
+</html>

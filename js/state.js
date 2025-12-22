@@ -6,7 +6,9 @@
 
 'use strict';
 
-import { MOCK_DATA } from './data.js';
+import { LETTERS } from './data/letters.js';
+import { WORDS } from './data/words.js';
+import { PHRASES } from './data/phrases.js';
 
 /**
  * DataRepository — Repository pattern for data access
@@ -20,11 +22,11 @@ export class DataRepository {
      */
     static getData(mode) {
         if (mode === 'letters') {
-            return [...MOCK_DATA.letters];
+            return [...LETTERS];
         } else if (mode === 'words') {
             return [
-                ...MOCK_DATA.words,
-                ...MOCK_DATA.phrases
+                ...WORDS,
+                ...PHRASES
             ];
         }
         return [];
@@ -35,7 +37,7 @@ export class DataRepository {
      * @returns {Array} - Array of all letters
      */
     static getAllLetters() {
-        return [...MOCK_DATA.letters];
+        return [...LETTERS];
     }
 
     /**
@@ -44,7 +46,7 @@ export class DataRepository {
      */
     static getGeoToRusMap() {
         const map = new Map();
-        MOCK_DATA.letters.forEach(l => map.set(l.geo, l.rus));
+        LETTERS.forEach(l => map.set(l.geo, l.rus));
         return map;
     }
 
@@ -54,7 +56,7 @@ export class DataRepository {
      */
     static getRusToGeoMap() {
         const map = new Map();
-        MOCK_DATA.letters.forEach(l => map.set(l.rus, l.geo));
+        LETTERS.forEach(l => map.set(l.rus, l.geo));
         return map;
     }
 
@@ -63,7 +65,7 @@ export class DataRepository {
      * @returns {Array} - Array of words
      */
     static getWords() {
-        return [...MOCK_DATA.words];
+        return [...WORDS];
     }
 
     /**
@@ -71,7 +73,7 @@ export class DataRepository {
      * @returns {Array} - Array of phrases
      */
     static getPhrases() {
-        return [...MOCK_DATA.phrases];
+        return [...PHRASES];
     }
 
     /**
@@ -79,6 +81,6 @@ export class DataRepository {
      * @returns {Array} - Array of words with transliteration
      */
     static getSimpleWords() {
-        return [...MOCK_DATA.words];
+        return [...WORDS];
     }
 }

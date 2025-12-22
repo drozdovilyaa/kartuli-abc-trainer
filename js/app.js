@@ -79,8 +79,15 @@ export class App {
             // Hint button (modal)
             const hintBtn = e.target.closest('#hint-btn');
             if (hintBtn) {
-                const hintText = hintBtn.dataset.hint;
-                this._showHintModal(hintText);
+                const itemData = hintBtn.dataset.hintItem;
+                if (itemData) {
+                    try {
+                        const item = JSON.parse(decodeURIComponent(itemData));
+                        this._showHintModal(item);
+                    } catch (err) {
+                        console.error('Failed to parse hint data:', err);
+                    }
+                }
             }
         });
 
@@ -129,16 +136,95 @@ export class App {
     }
 
     /**
-     * Show hint modal dialog
+     * Show hint modal dialog with full item information
+     * @param {Object} item - Word, phrase or letter object
      * @private
      */
-    _showHintModal(hintText) {
+    _showHintModal(item) {
         const modalBody = document.getElementById('hintModalBody');
-        if (modalBody && hintText) {
-            modalBody.textContent = hintText;
-            const modal = new bootstrap.Modal(document.getElementById('hintModal'));
-            modal.show();
+        const modalTitle = document.getElementById('hintModalLabel');
+        
+        if (!modalBody || !item) return;
+        
+        let html = '';
+        
+        // Determine type: phrase has geo_phrase, letter has type='letter', word has translit
+        const isPhrase = item.type === 'phrase' || item.geo_phrase;
+        const isLetter = item.type === 'letter';
+        
+        if (isPhrase) {
+            // Phrase hint
+            modalTitle.innerHTML = '<i class="bi bi-lightbulb text-warning"></i> Подсказка к фразе';
+            html = `
+                <div class="hint-content">
+                    <div class="hint-main">
+                        <div class="hint-geo geo-font-1">${item.geo_phrase}</div>
+                        <div class="hint-rus">${item.rus_phrase}</div>
+                    </div>
+                    <div class="hint-words mt-3">
+                        <div class="hint-label">Слова:</div>
+                        <div class="hint-words-list">
+                            ${(item.geo_words_shuffled || []).map(w => `<span class="badge bg-secondary me-1 geo-font-1">${w}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (isLetter) {
+            // Letter hint
+            modalTitle.innerHTML = '<i class="bi bi-lightbulb text-warning"></i> Подсказка к букве';
+            html = `
+                <div class="hint-content">
+                    <div class="hint-main">
+                        <div class="hint-geo geo-font-1">${item.geo || ''}</div>
+                        <div class="hint-rus">${item.rus || ''}</div>
+                    </div>
+                    ${item.comment ? `
+                        <div class="hint-details">
+                            <div class="hint-row hint-comment">
+                                <span class="hint-label">Примечание:</span>
+                                <span class="hint-value">${item.comment}</span>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        } else {
+            // Word hint
+            modalTitle.innerHTML = '<i class="bi bi-lightbulb text-warning"></i> Подсказка к слову';
+            html = `
+                <div class="hint-content">
+                    <div class="hint-main">
+                        <div class="hint-geo geo-font-1">${item.geo || ''}</div>
+                        <div class="hint-translit">[${item.translit || ''}]</div>
+                        <div class="hint-rus">${item.rus || ''}</div>
+                    </div>
+                    <div class="hint-details">
+                        ${item.partOfSpeech ? `
+                            <div class="hint-row">
+                                <span class="hint-label">Часть речи:</span>
+                                <span class="hint-value">${item.partOfSpeech}</span>
+                            </div>
+                        ` : ''}
+                        ${item.plural ? `
+                            <div class="hint-row">
+                                <span class="hint-label">Множ. число:</span>
+                                <span class="hint-value geo-font-1">${item.plural}</span>
+                            </div>
+                        ` : ''}
+                        ${item.comment ? `
+                            <div class="hint-row hint-comment">
+                                <span class="hint-label">Примечание:</span>
+                                <span class="hint-value">${item.comment}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
         }
+        
+        modalBody.innerHTML = html;
+        const modal = new bootstrap.Modal(document.getElementById('hintModal'));
+        modal.show();
     }
 
     /**

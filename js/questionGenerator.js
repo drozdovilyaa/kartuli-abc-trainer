@@ -15,7 +15,7 @@ import { DataRepository } from './state.js';
  */
 export class QuestionRendererFactory {
     /** Array of Georgian font classes */
-    static GEO_FONTS = ['geo-font-1', 'geo-font-2', 'geo-font-3'];
+    static GEO_FONTS = ['geo-font-1', 'geo-font-2'];
 
     /**
      * Get random Georgian font class
@@ -47,22 +47,18 @@ export class QuestionRendererFactory {
 
     /**
      * Generates HTML for hint button (opens modal)
-     * @param {string} translation - Translation text (Russian)
-     * @param {string} translit - Transliteration text (optional)
+     * @param {Object} item - Full item object (word or phrase)
      * @returns {string} HTML string
      */
-    static renderHintButton(translation, translit = null) {
-        if (!translation && !translit) return '';
+    static renderHintButton(item) {
+        if (!item) return '';
         
-        // Build hint text with both translation and transliteration if available
-        let hintText = '';
-        if (translation) hintText += translation;
-        // TODO: Temporarily disabled transliteration in hints
-        // if (translit) hintText += (hintText ? ' • ' : '') + `[${translit}]`;
+        // Serialize item data for modal (escape for HTML attribute)
+        const itemData = encodeURIComponent(JSON.stringify(item));
         
         return `
             <button class="btn btn-sm btn-outline-warning ms-2" id="hint-btn" 
-                    data-hint="${hintText}" title="Показать подсказку">
+                    data-hint-item="${itemData}" title="Показать подсказку">
                 <i class="bi bi-lightbulb"></i>
             </button>`;
     }
@@ -78,14 +74,15 @@ export class QuestionRendererFactory {
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
         
-        // Hint with translation and transliteration for words
-        const hintBtn = item.type === 'word' 
-            ? QuestionRendererFactory.renderHintButton(item.rus, item.translit) 
-            : '';
+        // Determine if this is a word (has translit field) or letter
+        const isWord = !!item.translit;
+        
+        // Hint button for both words and letters
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">${item.type === 'word' ? 'Выберите перевод' : 'Какая буква соответствует?'} ${hintBtn}</p>
-            <div class="${item.type === 'word' ? 'display-4' : 'display-1'} fw-bold text-primary ${fontClass}">${item.geo}</div>
+            <p class="text-muted mb-2">${isWord ? 'Выберите перевод' : 'Какая буква соответствует?'} ${hintBtn}</p>
+            <div class="${isWord ? 'display-4' : 'display-1'} fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
         answerContainer.innerHTML = `
@@ -112,13 +109,14 @@ export class QuestionRendererFactory {
         const options = Utils.shuffleArray([correctAnswer, ...distractors]);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
         
-        // Hint with Georgian word and transliteration for words
-        const hintBtn = item.type === 'word' 
-            ? QuestionRendererFactory.renderHintButton(item.geo, item.translit) 
-            : '';
+        // Determine if this is a word (has translit field) or letter
+        const isWord = !!item.translit;
+        
+        // Hint button for both words and letters
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">${item.type === 'word' ? 'Выберите перевод' : 'Выберите на грузинском'} ${hintBtn}</p>
+            <p class="text-muted mb-2">${isWord ? 'Выберите перевод' : 'Выберите на грузинском'} ${hintBtn}</p>
             <div class="display-4 fw-bold text-primary">${item.rus}</div>
         `;
 
@@ -141,9 +139,12 @@ export class QuestionRendererFactory {
     static renderInputGeoRus(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
         const fontClass = QuestionRendererFactory.getRandomFontClass();
+        
+        // Hint button for letters too
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">Напишите соответствие</p>
+            <p class="text-muted mb-2">Напишите соответствие ${hintBtn}</p>
             <div class="display-1 fw-bold text-primary ${fontClass}">${item.geo}</div>
         `;
 
@@ -171,13 +172,14 @@ export class QuestionRendererFactory {
         const correctAnswer = item.geo;
         const fontClass = QuestionRendererFactory.getRandomFontClass();
         
-        // Hint with Georgian word and transliteration for words
-        const hintBtn = item.type === 'word' 
-            ? QuestionRendererFactory.renderHintButton(item.geo, item.translit) 
-            : '';
+        // Determine if this is a word (has translit field) or letter
+        const isWord = !!item.translit;
+        
+        // Hint button for both words and letters
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
 
         questionContainer.innerHTML = `
-            <p class="text-muted mb-2">${item.type === 'word' ? 'Напишите перевод' : 'Напишите на грузинском'} ${hintBtn}</p>
+            <p class="text-muted mb-2">${isWord ? 'Напишите перевод' : 'Напишите на грузинском'} ${hintBtn}</p>
             <div class="display-4 fw-bold text-primary">${item.rus}</div>
         `;
 
@@ -213,7 +215,7 @@ export class QuestionRendererFactory {
         ).map(l => l.geo);
         
         const poolLetters = Utils.shuffleArray([...geoLetters, ...distractors]);
-        const hintBtn = QuestionRendererFactory.renderHintButton(item.rus, item.translit);
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Соберите слово из букв ${hintBtn}</p>
@@ -252,7 +254,7 @@ export class QuestionRendererFactory {
      */
     static renderTranslitInput(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.translit;
-        const hintBtn = QuestionRendererFactory.renderHintButton(item.rus, item.translit);
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
@@ -282,8 +284,8 @@ export class QuestionRendererFactory {
      */
     static renderTranslateInput(item, allItems, questionContainer, answerContainer) {
         const correctAnswer = item.rus;
-        // Hint shows Russian translation and transliteration
-        const hintBtn = QuestionRendererFactory.renderHintButton(item.rus, item.translit);
+        // Hint shows full item info
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
 
         questionContainer.innerHTML = `
@@ -317,8 +319,8 @@ export class QuestionRendererFactory {
         const shuffledWords = Utils.shuffleArray([...words]);
         const fontClass = QuestionRendererFactory.getRandomFontClass();
         
-        // Hint with correct Georgian phrase
-        const hintBtn = QuestionRendererFactory.renderHintButton(item.geo_phrase);
+        // Hint with full phrase info
+        const hintBtn = QuestionRendererFactory.renderHintButton(item);
 
         questionContainer.innerHTML = `
             <p class="text-muted mb-2">Соберите фразу ${hintBtn}</p>
